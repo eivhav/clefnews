@@ -17,7 +17,7 @@ public class Article{
     public String text_content = "";
 
     public ArrayList<Integer> keywords = new ArrayList<Integer>();
-    public HashMap<Date, Article> users_cliked_on = new HashMap<Date, Article>();
+    public HashMap<Long, User> users_cliked_on = new HashMap<Long, User>();
 
     public boolean recommendable = false;
 

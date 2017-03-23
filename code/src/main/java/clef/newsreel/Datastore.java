@@ -15,7 +15,7 @@ public class Datastore {
     private JSONparsers jsonparsers = new JSONparsers();
 
     public HashMap<Long, Article> articles = new HashMap<Long, Article>();
-    public HashMap<Integer, User> users = new HashMap<Integer, User>();
+    public HashMap<Long, User> users = new HashMap<Long, User>();
 
 
 
