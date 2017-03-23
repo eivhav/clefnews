@@ -19,11 +19,7 @@ DEALINGS IN THE SOFTWARE.
 
 package de.dailab.plistacontest.client;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * A HashMap providing a ring buffer for each key. This implementation shall illustrate a simple baseline recommender. 
@@ -120,15 +116,22 @@ public class DirtyRingBuffer<K, V> {
 		
 		// determine the current write position
 		int[] temp = this.listIndexByKey.get(key);
+		System.out.println(">>>temp:");
+		for(int i=0;i<temp.length;i++){
+			System.out.print(temp[i]);
+			System.out.print(",");
+		}
+		System.out.println("");
 		
 		// search backward in the ring buffer starting just at the last written position
 		if (temp != null){
 			int currentIndex =  temp[0];
-			
+			double threshHold = numberOfValues / temp.length*1.0;
 			// limit the number of search steps
 			// since the lists may contain duplicates, searches may needs more steps
 			for (int i = 0; i < 3 * numberOfValues; i++) {
-				
+				double r = Math.random();
+
 				// determine the last position
 				if (currentIndex <= 0) {
 					currentIndex = maximalNumberOfItemsPerKey;
@@ -136,7 +139,8 @@ public class DirtyRingBuffer<K, V> {
 				currentIndex = currentIndex-1;
 				V currentObject = (V) this.listByKey.get(key)[currentIndex];
 				// the itemID may not be null, already contained in the result list, or contained in the black list
-				if (currentObject != null && !result.contains(currentObject) && !_blackListedIDs.contains(currentObject)) {
+				if (currentObject != null && !result.contains(currentObject) && !_blackListedIDs.contains(currentObject)
+						&& r <= threshHold) {
 					result.add(currentObject);
 				}
 				
@@ -170,9 +174,9 @@ public class DirtyRingBuffer<K, V> {
 	 * @param args
 	 * @throws InterruptedException
 	 */
-	public static void main(String[] args) throws InterruptedException {
+	public static void main(String[] args) throws InterruptedException, Exception {
 
-		System.out.println("Hallo");
+		/*System.out.println("Hallo");
 		DirtyRingBuffer<String,Integer> myMap = new DirtyRingBuffer<String,Integer>(3);
 		myMap.addValueByKey("User0", 1);
 		System.out.println(myMap);
@@ -196,7 +200,24 @@ public class DirtyRingBuffer<K, V> {
 		myMap.addValueByKey("User2", 3);
 		System.out.println(myMap);
 		myMap.addValueByKey("User3", 100);
-		System.out.println(myMap);
+		System.out.println(myMap);*/
+		System.out.println("start");
+		int[] l = {1,2,3,4,5};
+		for(int i=0;i<l.length;i++){
+			System.out.print(l[i]);
+			System.out.print(",");
+		}
+		System.out.println();
+		/*Process pr = Runtime.getRuntime().exec("python /Users/zhanglemei/Documents/project/clefnews/pyfile/test.py");
+		BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+		String line;
+		while ((line = in.readLine()) != null) {
+			System.out.println(line);
+		}
+		in.close();
+		pr.waitFor();*/
+		System.out.println("end");
+
 
 	}
 }

@@ -79,6 +79,7 @@ public class RecommenderItemTable {
 		// copy the results to a new list and return
 		List<Long> returnResult = new ArrayList<Long>();
 		returnResult.addAll(result);
+		System.out.println(">>>Print out result: "+returnResult);
 		return returnResult;
 	}
 }

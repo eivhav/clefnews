@@ -1,24 +1,15 @@
 package eu.crowdrec.contest.evaluation;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.TreeMap;
-
+import eu.crowdrec.contest.evaluation.LinkedFileCacheDuplicateSupport.CacheEntry;
 import org.apache.commons.math.stat.descriptive.SummaryStatistics;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import eu.crowdrec.contest.evaluation.LinkedFileCacheDuplicateSupport.CacheEntry;
+import java.io.*;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class Evaluator {
@@ -171,7 +162,7 @@ public class Evaluator {
 	public static void main(String[] args) throws IOException {
 		
 		// define default settings for simplified testing
-		String predictionFileName = "";
+		String predictionFileName = "/Users/zhanglemei/Documents/project/clefnews/nr100000lines.log";
 		String groundTruthFileName = "";
 
 		// define the default window size
