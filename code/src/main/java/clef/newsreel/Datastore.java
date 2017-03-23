@@ -12,16 +12,18 @@ import java.util.HashMap;
  */
 public class Datastore {
 
-    public HashMap<Integer, Article> articles = new HashMap<Integer, Article>();
+    private JSONparsers jsonparsers = new JSONparsers();
+
+    public HashMap<Long, Article> articles = new HashMap<Long, Article>();
     public HashMap<Integer, User> users = new HashMap<Integer, User>();
+
 
 
     public Datastore(){}
 
     public void register_article(String jsonMessageBody){
-        final JSONObject jObj = (JSONObject) JSONValue.parse(jsonMessageBody);
+        jsonparsers.parseAndUpdateArticles(jsonMessageBody, articles);
 
-        //Article article = new Article(Integer.parseInt(String(jObj.get("item_id"))), jObj.get("domain_id"), jObj.get("created_date"))
 
 
 
@@ -36,34 +38,9 @@ public class Datastore {
 
 
 
-    class Article{
-
-        public int item_id;
-        public int domain_id;
-        public Date created_date;
-
-        public ArrayList<Integer> keywords = new ArrayList<Integer>();
-        public HashMap<Date, Article> users_cliked_on = new HashMap<Date, Article>();
-
-        public Article(int item_id, int domain_id, String date){
-            this.item_id = item_id;
-            this.domain_id = domain_id;
-            this.created_date = null; //TODO: add date
-        }
-    }
-
-    class User{
-
-        public int user_id;
-        public HashMap<Date, Article> articles_clicked_on = new HashMap<Date, Article>();
-
-        public User(int user_id){
-            this.user_id = user_id;
-        }
 
 
 
-    }
 
 
 
