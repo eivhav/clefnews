@@ -325,6 +325,7 @@ public class RecommenderItem {
 	 *         been detected.
 	 */
 	public static RecommenderItem parseItemUpdate(String _jsonMessageBody) {
+
 		try {
 			final JSONObject jsonObj = (JSONObject) JSONValue
 					.parse(_jsonMessageBody);

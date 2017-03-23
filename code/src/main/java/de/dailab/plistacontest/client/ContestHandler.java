@@ -235,9 +235,8 @@ public class ContestHandler extends AbstractHandler {
 	 * @return the response to the contest server
 	 */
 	@SuppressWarnings("unused")
-	private String handleTraditionalMessage(final String messageType,
-			final String _jsonMessageBody) {
-
+	private String handleTraditionalMessage(final String messageType, final String _jsonMessageBody) {
+		System.out.println("Handling tradition message");
 		// write all data from the server to a file
 		logger.info(messageType + "\t" + _jsonMessageBody);
 
@@ -254,8 +253,7 @@ public class ContestHandler extends AbstractHandler {
 		if ("item_update".equalsIgnoreCase(messageType)) {
 
 			// we extract itemID, domainID, text and the timeTime, create/update
-			final RecommenderItem recommenderItem = RecommenderItem
-					.parseItemUpdate(_jsonMessageBody);
+			final RecommenderItem recommenderItem = RecommenderItem.parseItemUpdate(_jsonMessageBody);
 
 			// we mark this information in the article table
 			if (recommenderItem.getItemID() != null) {

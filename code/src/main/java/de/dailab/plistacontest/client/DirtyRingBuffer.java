@@ -117,9 +117,11 @@ public class DirtyRingBuffer<K, V> {
 		// determine the current write position
 		int[] temp = this.listIndexByKey.get(key);
 		System.out.println(">>>temp:");
-		for(int i=0;i<temp.length;i++){
-			System.out.print(temp[i]);
-			System.out.print(",");
+		if(temp!=null){
+			for(int i=0;i<temp.length;i++){
+				System.out.print(temp[i]);
+				System.out.print(",");
+			}
 		}
 		System.out.println("");
 		
