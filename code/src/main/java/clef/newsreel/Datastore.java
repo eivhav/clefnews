@@ -21,6 +21,7 @@ public class Datastore {
     public void register_article(String jsonMessageBody){
         final JSONObject jObj = (JSONObject) JSONValue.parse(jsonMessageBody);
 
+        //Article article = new Article(Integer.parseInt(String(jObj.get("item_id"))), jObj.get("domain_id"), jObj.get("created_date"))
 
 
 
@@ -47,7 +48,7 @@ public class Datastore {
         public Article(int item_id, int domain_id, String date){
             this.item_id = item_id;
             this.domain_id = domain_id;
-            this.created_date =
+            this.created_date = null; //TODO: add date
         }
     }
 
