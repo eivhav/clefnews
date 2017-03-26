@@ -20,7 +20,8 @@ public class Main {
     public static void main(String[] args){
 
         String filePath = "/home/havikbot/Documents/";
-        int[] fileNumbers = {1,1};
+        int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
+                                    // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
         ArrayList<Object> datastream = dataloader.loadDataStream(filePath, fileNumbers);
@@ -35,7 +36,7 @@ public class Main {
             if(o instanceof DataLoader.ClickEvent){
                 DataLoader.ClickEvent ce = (DataLoader.ClickEvent) o;
                 if ((""+ce.userID).equals("36908532294343288")){
-                    System.out.println("click:     \t" + ce.listOfDisplayedRecs + "\t" + ce.itemID  +"\t" + new Date(ce.timeStamp) );
+                    System.out.println("click:     \t" + ce.clickedArticles + "\t" + ce.itemID  +"\t" + new Date(ce.timeStamp) );
                 }
                 //System.out.println(ce.userID);
             }

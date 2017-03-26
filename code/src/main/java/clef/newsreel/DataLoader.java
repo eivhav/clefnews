@@ -39,9 +39,9 @@ public class DataLoader implements Serializable  {
 
     class ClickEvent implements Serializable{
         long domainID;
-        long itemID;
+        long itemID;                    // The articleID where the recommendations is shown
         long userID;
-        List<Long> listOfDisplayedRecs;
+        List<Long> clickedArticles;     // The articleID the user clicks on
         long timeStamp;
 
         public ClickEvent(long domainID, long itemID, long userID, List<Long> listOfDisplayedRecs, long timeStamp){
@@ -49,17 +49,17 @@ public class DataLoader implements Serializable  {
             this.itemID = itemID;
             this.userID = userID;
             this.timeStamp = timeStamp;
-            this.listOfDisplayedRecs = listOfDisplayedRecs;
+            this.clickedArticles = listOfDisplayedRecs;
         }
     }
 
 
     class RecommendationReq implements Serializable {
         long domainID;
-        long itemID;        //The article
+        long itemID;
         long userID;
         long timeStamp;
-        long limit;
+        long limit;         //max nb recommendations ro return
 
         public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
             this.domainID = domainID;
