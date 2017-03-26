@@ -22,7 +22,7 @@ public class Main {
         int[] fileNumbers = {1,1};
 
         DataLoader dataloader = new DataLoader();
-        ArrayList<Object> DataLoader = dataloader.loadDataStream(filePath, fileNumbers);
+        ArrayList<Object> datastream = dataloader.loadDataStream(filePath, fileNumbers);
 
 
 
