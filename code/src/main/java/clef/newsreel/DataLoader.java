@@ -19,12 +19,12 @@ public class DataLoader implements Serializable  {
     public DataLoader(){}
 
     class ItemUpdate implements Serializable{
-        final long itemID;
-        final long domainID;
-        final String text;
-        final String title;
-        final boolean recommendable;
-        final long created_date;
+        long itemID;
+        long domainID;
+        String text;
+        String title;
+        boolean recommendable;
+        long created_date;
 
         public ItemUpdate(long itemID, long domainID, String text, String title, boolean rec, long time){
             this.itemID = itemID;
@@ -38,9 +38,9 @@ public class DataLoader implements Serializable  {
 
 
     class ClickEvent implements Serializable{
-        final long domainID;
-        final long itemID;
-        final long userID;
+        long domainID;
+        long itemID;
+        long userID;
         List<Long> listOfDisplayedRecs;
         long timeStamp;
 
@@ -55,9 +55,9 @@ public class DataLoader implements Serializable  {
 
 
     class RecommendationReq implements Serializable {
-        final long domainID;
-        final long itemID;
-        final long userID;
+        long domainID;
+        long itemID;        //The article
+        long userID;
         long timeStamp;
         long limit;
 
