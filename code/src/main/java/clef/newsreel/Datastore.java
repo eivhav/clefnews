@@ -19,26 +19,37 @@ import clef.newsreel.DataLoader.RecommendationReq;
 public class Datastore {
 
 
-
-    public HashMap<Long, Article> articles = new HashMap<Long, Article>();
+    public HashMap<Long, Domain> domains = new HashMap<Long, Domain> ();
     public HashMap<Long, User> users = new HashMap<Long, User>();
 
 
     public Datastore(){}
 
+    public class Domain{
+        long domainID;
+        public HashMap<Long, Article> articles = new HashMap<Long, Article>();
+
+        public Domain(long domainID){
+            this.domainID = domainID;
+        }
+    }
 
 
-    public void register_article(ItemUpdate itemUpdate){
+    public void registerArticle(ItemUpdate itemUpdate){
 
+        if(!domains.containsKey(itemUpdate.domainID)){
+            domains.put(itemUpdate.domainID, new Domain(itemUpdate.domainID));
+        }
+        HashMap<Long, Article> articles = domains.get(itemUpdate.domainID).articles;
         if(itemUpdate.itemID != 0) {
             Article article;
             if (articles.containsKey(itemUpdate.itemID)) {
                 article = articles.get(itemUpdate.itemID);
-                article.domainID = itemUpdate.domainID;
+                article.domain = domains.get(itemUpdate.domainID);
                 article.created_date = itemUpdate.created_date;
 
             } else {
-                article = new Article(itemUpdate.itemID, itemUpdate.domainID, itemUpdate.created_date);
+                article = new Article(itemUpdate.itemID, domains.get(itemUpdate.domainID), itemUpdate.created_date);
                 articles.put(itemUpdate.itemID, article);
             }
             article.title = itemUpdate.title;
@@ -51,17 +62,35 @@ public class Datastore {
         }
     }
 
-    public void register_clickEvent(ClickEvent clickEvent){
+
+    public void registerRecomemndationReq(RecommendationReq rec){
+        if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
+
+            // If user has not been seen before, crete new and add to user-HashMap
+            if(!users.containsKey(rec.userID)){ users.put(rec.userID, new User(rec.userID)); }
+
+            User user = users.get(rec.userID);
+            Article article = domains.get(rec.domainID).articles.get(rec.itemID);
+            user.registerReqEventForUser(domains.get(rec.domainID), article, rec.timeStamp);
+            article.user_visited.put(rec.userID, user);
+        }
+
+
+
+        //TODO
+
+    }
+
+    public void registerClickEvent(ClickEvent clickEvent){
         //TODO
 
 
 
     }
 
-    public void register_recomemndation_request(RecommendationReq recommendationReq){
-        //TODO
 
-    }
+
+
 
 
 
