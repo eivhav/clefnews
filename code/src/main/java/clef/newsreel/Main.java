@@ -35,15 +35,15 @@ public class Main {
             if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
-                datastore.registerRecomemndationReq((RecommendationReq) event);
-                //TODO Run recomender and set user.latestSession[domainID].recomenderItem = recomended item
+                datastore.registerRecommendationReq((RecommendationReq) event);
+                //TODO Run recommender and set user.latestSession[domainID].recomenderItem = recomended item
 
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
 
-
             }
         }
+
 
 
 

@@ -63,7 +63,7 @@ public class Datastore {
     }
 
 
-    public void registerRecomemndationReq(RecommendationReq rec){
+    public void registerRecommendationReq(RecommendationReq rec){
         if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
 
             // If user has not been seen before, crete new and add to user-HashMap
@@ -75,9 +75,6 @@ public class Datastore {
             article.user_visited.put(rec.userID, user);
         }
 
-
-
-        //TODO
 
     }
 
