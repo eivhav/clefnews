@@ -2,11 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="4e186207-3dbe-4d74-8cc1-ec176764d22e" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/.idea/vcs.xml" afterPath="" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
@@ -24,18 +23,6 @@
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="JSONparsers.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="432">
-              <caret line="24" column="26" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="ContestHandler.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/de/dailab/plistacontest/client/ContestHandler.java">
           <provider selected="true" editor-type-id="text-editor">
@@ -56,14 +43,13 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Main.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="Main.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="378">
-              <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+            <state relative-caret-position="558">
+              <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#495#503#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -72,13 +58,24 @@
       <file leaf-file-name="Datastore.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1080">
-              <caret line="78" column="36" lean-forward="false" selection-start-line="78" selection-start-column="36" selection-end-line="78" selection-end-column="36" />
+            <state relative-caret-position="270">
+              <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
               <folding>
                 <element signature="imports" expanded="true" />
-                <element signature="e#556#564#0" expanded="true" />
-                <element signature="e#894#913#0" expanded="true" />
-                <element signature="e#1096#1104#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="DataLoader.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="3901">
+              <caret line="227" column="0" lean-forward="true" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2165#2173#0" expanded="true" />
+                <element signature="e#4206#4214#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -115,6 +112,18 @@
       </file>
     </leaf>
   </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="FindInProjectRecents">
+    <findStrings>
+      <find>JSONparser</find>
+    </findStrings>
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
@@ -127,9 +136,10 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" />
-        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java" />
+        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" />
+        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java" />
       </list>
     </option>
   </component>
@@ -769,12 +779,20 @@
       <updated>1490349881716</updated>
       <workItem from="1490349883236" duration="9424000" />
       <workItem from="1490379192998" duration="236000" />
-      <workItem from="1490528577637" duration="6989000" />
+      <workItem from="1490528577637" duration="9095000" />
     </task>
+    <task id="LOCAL-00001" summary="A lot of work done&#10;">
+      <created>1490535686213</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1490535686213</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="16649000" />
+    <option name="totallyTimeSpent" value="18755000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="51" y="456" width="2509" height="1416" extended-state="6" />
@@ -787,7 +805,7 @@
       <window_info id="Palette&#9;" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Image Layers" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960477" sideWeight="0.501395" order="7" side_tool="true" content_ui="tabs" />
+      <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32960477" sideWeight="0.501395" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.32960477" sideWeight="0.498605" order="2" side_tool="false" content_ui="tabs" />
@@ -817,6 +835,10 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="A lot of work done&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="A lot of work done&#10;" />
+  </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
     <watches-manager />
@@ -830,9 +852,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1674">
           <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -858,7 +878,6 @@
           <caret line="48" column="40" lean-forward="false" selection-start-line="48" selection-start-column="40" selection-end-line="48" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#495#503#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -869,9 +888,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#556#564#0" expanded="true" />
-            <element signature="e#894#913#0" expanded="true" />
-            <element signature="e#1096#1104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -905,9 +921,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1674">
           <caret line="102" column="0" lean-forward="false" selection-start-line="102" selection-start-column="0" selection-end-line="102" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -933,7 +947,6 @@
           <caret line="48" column="40" lean-forward="true" selection-start-line="48" selection-start-column="40" selection-end-line="48" selection-end-column="40" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#495#503#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -944,9 +957,6 @@
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#556#564#0" expanded="true" />
-            <element signature="e#894#913#0" expanded="true" />
-            <element signature="e#1096#1104#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -1017,36 +1027,42 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1080">
-          <caret line="78" column="36" lean-forward="false" selection-start-line="78" selection-start-column="36" selection-end-line="78" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#556#564#0" expanded="true" />
-            <element signature="e#894#913#0" expanded="true" />
-            <element signature="e#1096#1104#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="432">
-          <caret line="24" column="26" lean-forward="true" selection-start-line="24" selection-start-column="26" selection-end-line="24" selection-end-column="26" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="1760">
+          <caret line="300" column="0" lean-forward="true" selection-start-line="300" selection-start-column="0" selection-end-line="300" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="378">
-          <caret line="30" column="0" lean-forward="true" selection-start-line="30" selection-start-column="0" selection-end-line="30" selection-end-column="0" />
+        <state relative-caret-position="558">
+          <caret line="31" column="0" lean-forward="true" selection-start-line="31" selection-start-column="0" selection-end-line="31" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#495#503#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="270">
+          <caret line="18" column="24" lean-forward="true" selection-start-line="18" selection-start-column="24" selection-end-line="18" selection-end-column="24" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3901">
+          <caret line="227" column="0" lean-forward="true" selection-start-line="227" selection-start-column="0" selection-end-line="227" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2165#2173#0" expanded="true" />
+            <element signature="e#4206#4214#0" expanded="true" />
           </folding>
         </state>
       </provider>

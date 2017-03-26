@@ -1,27 +1,24 @@
 package clef.newsreel;
 
-import de.dailab.plistacontest.client.RecommenderItem;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
-import java.io.Serializable;
+import java.io.*;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-
 /**
- * Created by havikbot on 23.03.17.
+ * Created by havikbot on 26.03.17.
  */
-public class JSONparsers implements Serializable{
+public class DataLoader implements Serializable  {
 
-    public JSONparsers(){}
+    public DataLoader(){}
 
     class ItemUpdate implements Serializable{
-
         final long itemID;
         final long domainID;
         final String text;
@@ -37,11 +34,153 @@ public class JSONparsers implements Serializable{
             this.recommendable = rec;
             this.created_date = time;
         }
+    }
+
+
+    class ClickEvent implements Serializable{
+        final long domainID;
+        final long itemID;
+        final long userID;
+        List<Long> listOfDisplayedRecs;
+        long timeStamp;
+
+        public ClickEvent(long domainID, long itemID, long userID, List<Long> listOfDisplayedRecs, long timeStamp){
+            this.domainID = domainID;
+            this.itemID = itemID;
+            this.userID = userID;
+            this.timeStamp = timeStamp;
+            this.listOfDisplayedRecs = listOfDisplayedRecs;
+        }
+    }
+
+
+    class RecommendationReq implements Serializable {
+        final long domainID;
+        final long itemID;
+        final long userID;
+        long timeStamp;
+        long limit;
+
+        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
+            this.domainID = domainID;
+            this.itemID = itemID;
+            this.userID = userID;
+            this.timeStamp = timeStamp;
+            this.limit = limit;
+        }
+    }
+
+
+    public ArrayList<Object> loadDataStream(String filepath, int[] fileNumbers){
+
+        String prefix = "nr2016-02-";
+        ArrayList<Object> datastream = new ArrayList<Object>();
+
+        for(int i = fileNumbers[0]; i <= fileNumbers[1]; i++){
+            String fileName;
+            if(i < 10){ fileName = prefix + "0" + i; }
+            else { fileName = prefix  + i; }
+
+            ArrayList<Object> singleFileStream;
+            try{
+                FileInputStream fileIn = new FileInputStream(filepath+fileName+".ser");
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+                System.out.println("Reading serialized file: "+fileName+".ser");
+                singleFileStream = (ArrayList<Object>) in.readObject();
+                datastream.addAll(singleFileStream);
+                in.close();
+                fileIn.close();
+            }
+            catch(IOException ioE){
+                System.out.println("Could not find .ser file. Reading from .log file at"+filepath+fileName+".log");
+                singleFileStream = parseFile(filepath, fileName+".log");
+                datastream.addAll(singleFileStream);
+                try {
+                    FileOutputStream fileOut = new FileOutputStream(filepath+fileName+".ser");
+                    ObjectOutputStream out = new ObjectOutputStream(fileOut);
+                    out.writeObject(singleFileStream);
+                    out.close();
+                    fileOut.close();
+                    System.out.println("Serialized data is saved in "+filepath+fileName+".ser");
+                }
+                catch(IOException ioE2) {
+                    ioE2.printStackTrace();
+                    System.err.println("Could not save .ser file");
+                }
+            }
+            catch(ClassNotFoundException c){
+                c.printStackTrace();
+                System.err.println("ArrayList<Object> class not found when loading .ser file");
+            }
+        }
+        System.out.println("DataStream loaded. Size:" + datastream.size());
+        return datastream;
+    }
+
+
+    private ArrayList<Object> parseFile(String path, String fileName){
+
+        ArrayList<Object> events = new ArrayList<Object>();
+        try{
+            int[] counts = {0, 0, 0, 0, 0};     //[total_counts, item_updates, clicks, recommendations]
+            int[] discarded = {0, 0, 0};
+            BufferedReader br = new BufferedReader(new FileReader(path+fileName));
+            for(String line; (line = br.readLine()) != null; ) {
+                counts[0]++;
+
+                if(line.substring(0,11).equals("item_update")){
+                    ItemUpdate itemUpdate = parseItemUpdates(line.substring(12, line.length()-24));
+                    if(itemUpdate != null){
+                        events.add(itemUpdate);
+                        counts[1]++;
+                    }
+                    else{
+                        discarded[0]++;
+                    }
+                }
+                else if (line.substring(0,12).equals("event_notifi")){
+                    ClickEvent clickEvent = parseEventNotification(line.substring(19, line.length()-24));
+                    if(clickEvent != null){
+                        events.add(clickEvent);
+                        counts[2]++;
+                    }
+                    else{
+                        discarded[1]++;
+                    }
+                }
+                else if (line.substring(0,14).equals("recommendation")){
+                    RecommendationReq recommendationReq = parseRecommendationRequest(line.substring(23, line.length()-24));
+                    if(recommendationReq != null){
+                        events.add(recommendationReq);
+                        counts[3]++;
+                    }
+                    else{
+                        discarded[2]++;
+                    }
+                }
+
+                if(counts[0] % 100000 == 0){
+                    System.out.println("Processing: " + counts[0]);
+
+                }
+            }
+            System.out.println(fileName + " completed!");
+            System.out.println("#item_updates:"+counts[1] +"  Discarded:"+discarded[0]);
+            System.out.println("#clickEvents:"+counts[2] +"  Discarded:"+discarded[1]);
+            System.out.println("#reqEvents:"+counts[3] +"  Discarded:"+discarded[2]);
+            System.out.println();
+        }
+        catch (Exception e){
+            System.err.println("Could not read file or some other exception");
+        }
+
+        return events;
 
     }
 
 
-    public ItemUpdate parseItemUpdates(String _jsonMessageBody) {
+
+    private ItemUpdate parseItemUpdates(String _jsonMessageBody) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
@@ -86,26 +225,10 @@ public class JSONparsers implements Serializable{
     }
 
 
-    class ClickEvent implements Serializable{
-        final long domainID;
-        final long itemID;
-        final long userID;
-        List<Long> listOfDisplayedRecs;
-        long timeStamp;
-
-        public ClickEvent(long domainID, long itemID, long userID, List<Long> listOfDisplayedRecs, long timeStamp){
-            this.domainID = domainID;
-            this.itemID = itemID;
-            this.userID = userID;
-            this.timeStamp = timeStamp;
-            this.listOfDisplayedRecs = listOfDisplayedRecs;
-
-        }
-
-    }
 
 
-    public ClickEvent parseEventNotification(final String _jsonMessageBody) {
+
+    private ClickEvent parseEventNotification(final String _jsonMessageBody) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
@@ -125,7 +248,6 @@ public class JSONparsers implements Serializable{
                     return null;
                 }
             }
-
             Long itemID = null;
             try {
                 itemID = Long.valueOf(jsonObjectContextSimple.get("25").toString());
@@ -137,7 +259,6 @@ public class JSONparsers implements Serializable{
                     return null;
                 }
             }
-
             Long userID = -2L;
             try {
                 userID = Long.valueOf(jsonObjectContextSimple.get("57").toString());
@@ -149,7 +270,6 @@ public class JSONparsers implements Serializable{
                     return null;
                 }
             }
-
             // impressionType
             String notificationType = null;
             try {
@@ -168,7 +288,6 @@ public class JSONparsers implements Serializable{
             } catch (Exception e) {
                 e.printStackTrace();
             }
-
             // list of displayed recs
             List<Long> listOfDisplayedRecs = new ArrayList<Long>(6);
             try {
@@ -188,17 +307,13 @@ public class JSONparsers implements Serializable{
                 System.err.println("invalid jsonObject: " + jsonObj);
                 return null;
             }
-
             long timeStamp = 0;
             try {
                 timeStamp = (Long) jsonObj.get("created_at") + 0L;
             } catch (Exception ignored) {
                 timeStamp = (Long) jsonObj.get("timestamp");
             }
-
             return new ClickEvent(domainID, itemID, userID, listOfDisplayedRecs, timeStamp);
-
-
         }
         catch (Exception e){
             System.err.println("JSON parse failed at parseEventNotification");
@@ -207,25 +322,9 @@ public class JSONparsers implements Serializable{
         }
     }
 
-    class RecommendationReq implements Serializable {
-        final long domainID;
-        final long itemID;
-        final long userID;
-        long timeStamp;
-        long limit;
-
-        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
-            this.domainID = domainID;
-            this.itemID = itemID;
-            this.userID = userID;
-            this.timeStamp = timeStamp;
-            this.limit = limit;
 
 
-        }
-    }
-
-    public RecommendationReq parseRecommendationRequest(String _jsonMessageBody) {
+    private RecommendationReq parseRecommendationRequest(String _jsonMessageBody) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
@@ -296,8 +395,6 @@ public class JSONparsers implements Serializable{
         }
         return null;
     }
-
-
 
 
 
