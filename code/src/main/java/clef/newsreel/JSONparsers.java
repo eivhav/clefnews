@@ -5,29 +5,52 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+
 /**
  * Created by havikbot on 23.03.17.
  */
-public class JSONparsers {
+public class JSONparsers implements Serializable{
 
     public JSONparsers(){}
 
-    public void parseAndUpdateArticles(String _jsonMessageBody, HashMap<Long, Article> articles) {
+    class ItemUpdate implements Serializable{
+
+        final long itemID;
+        final long domainID;
+        final String text;
+        final String title;
+        final boolean recommendable;
+        final long created_date;
+
+        public ItemUpdate(long itemID, long domainID, String text, String title, boolean rec, long time){
+            this.itemID = itemID;
+            this.domainID = domainID;
+            this.text = text;
+            this.title = title;
+            this.recommendable = rec;
+            this.created_date = time;
+        }
+
+    }
+
+
+    public ItemUpdate parseItemUpdates(String _jsonMessageBody) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
 
-            String itemID = jsonObj.get("id") + "";
-            if ("null".equals(itemID)) {
-                itemID = "0";
-            }
-            String domainID = jsonObj.get("domainid") + "";
+            long itemID = 0;
+            long domainID = 0;
+            if (!"null".equals(jsonObj.get("id") + "")) { itemID = Long.parseLong(jsonObj.get("id") + ""); }
+            if (!"null".equals(jsonObj.get("domainid") + "")) { domainID = Long.parseLong(jsonObj.get("domainid") + ""); }
+
             String text = jsonObj.get("text") + "";
             String title = jsonObj.get("title") + "";
             String flag = jsonObj.get("flag") + "";
@@ -52,35 +75,37 @@ public class JSONparsers {
                 }
             }
 
-            if(!itemID.equals("0") && !domainID.equals("")){
-                Article article;
-                Long longItemID = Long.parseLong(itemID);
-                if(articles.containsKey(longItemID)) {
-                    article = articles.get(longItemID);
-                    article.domain_id = Long.parseLong(domainID);
-                    article.created_date = created;
-                }
-                else{
-                    article = new Article(longItemID, Long.parseLong(domainID), created);
-                    articles.put(longItemID, article);
-                }
-                article.title = title;
-                article.text_content = text;
-                article.recommendable = recommendable;
+            return new ItemUpdate(itemID, domainID, text, title, recommendable, created);
 
-
-            }
 
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
 
     }
 
 
+    class ClickEvent implements Serializable{
+        final long domainID;
+        final long itemID;
+        final long userID;
+        List<Long> listOfDisplayedRecs;
+        long timeStamp;
+
+        public ClickEvent(long domainID, long itemID, long userID, List<Long> listOfDisplayedRecs, long timeStamp){
+            this.domainID = domainID;
+            this.itemID = itemID;
+            this.userID = userID;
+            this.timeStamp = timeStamp;
+            this.listOfDisplayedRecs = listOfDisplayedRecs;
+
+        }
+
+    }
 
 
-    public void parseEventNotification(final String _jsonMessageBody) {
+    public ClickEvent parseEventNotification(final String _jsonMessageBody) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
@@ -96,7 +121,8 @@ public class JSONparsers {
                 try {
                     domainID = Long.valueOf(jsonObj.get("domainID").toString());
                 } catch (Exception e) {
-                    System.err.println("[Exception] no domainID found in "+ _jsonMessageBody);
+                    //System.err.println("[Exception] no domainID found in "+ _jsonMessageBody);
+                    return null;
                 }
             }
 
@@ -107,7 +133,8 @@ public class JSONparsers {
                 try {
                     itemID = Long.valueOf(jsonObj.get("itemID").toString());
                 } catch (Exception e) {
-                    System.err.println("[Exception] no itemID found in " + _jsonMessageBody);
+                    //System.err.println("[Exception] no itemID found in " + _jsonMessageBody);
+                    return null;
                 }
             }
 
@@ -118,7 +145,8 @@ public class JSONparsers {
                 try {
                     userID = Long.valueOf(jsonObj.get("userID").toString());
                 } catch (Exception e) {
-                    System.err.println("[Exception] no userID found in " + _jsonMessageBody);
+                    //System.err.println("[Exception] no userID found in " + _jsonMessageBody);
+                    return null;
                 }
             }
 
@@ -158,6 +186,7 @@ public class JSONparsers {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println("invalid jsonObject: " + jsonObj);
+                return null;
             }
 
             long timeStamp = 0;
@@ -167,20 +196,111 @@ public class JSONparsers {
                 timeStamp = (Long) jsonObj.get("timestamp");
             }
 
-            System.out.println("user: " + userID);
-            System.out.println("item: " + itemID);
-            System.out.println("domain: " + domainID);
-            System.out.println("notificationType: " + notificationType);
-            System.out.println("listOfDisplayedRecs: " + listOfDisplayedRecs.toString());
-
-
+            return new ClickEvent(domainID, itemID, userID, listOfDisplayedRecs, timeStamp);
 
 
         }
         catch (Exception e){
-            System.out.println("failed");
+            System.err.println("JSON parse failed at parseEventNotification");
+            return null;
 
         }
     }
+
+    class RecommendationReq implements Serializable {
+        final long domainID;
+        final long itemID;
+        final long userID;
+        long timeStamp;
+        long limit;
+
+        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
+            this.domainID = domainID;
+            this.itemID = itemID;
+            this.userID = userID;
+            this.timeStamp = timeStamp;
+            this.limit = limit;
+
+
+        }
+    }
+
+    public RecommendationReq parseRecommendationRequest(String _jsonMessageBody) {
+
+        try {
+            final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
+
+            // parse JSON structure to obtain "context.simple"
+            JSONObject jsonObjectContext = (JSONObject) jsonObj.get("context");
+            JSONObject jsonObjectContextSimple = (JSONObject) jsonObjectContext.get("simple");
+
+            Long domainID = -3L;
+            try {
+                domainID = Long.valueOf(jsonObjectContextSimple.get("27").toString());
+            } catch (Exception ignored) {
+                try {
+                    domainID = Long.valueOf(jsonObjectContextSimple.get("domainId").toString());
+                } catch (Exception e) {
+                    System.err.println("[Exception] no domainID found in "+ _jsonMessageBody);
+                    return null;
+                }
+            }
+
+
+            Long itemID = null;
+            try {
+                itemID = Long.valueOf(jsonObjectContextSimple.get("25").toString());
+            } catch (Exception ignored) {
+                try {
+                    itemID = Long.valueOf(jsonObjectContextSimple.get("itemId").toString());
+                } catch (Exception e) {
+                    System.err.println("[Exception] no itemID found in " + _jsonMessageBody);
+                    return null;
+                }
+            }
+
+
+            Long userID = -2L;
+            try {
+                userID = Long.valueOf(jsonObjectContextSimple.get("57").toString());
+            } catch (Exception ignored) {
+                try {
+                    userID = Long.valueOf(jsonObjectContextSimple.get("userId").toString());
+                } catch (Exception e) {
+                    System.err.println("[INFO] no userID found in " + _jsonMessageBody);
+                    return null;
+                }
+            }
+
+            long timeStamp = 0;
+            try {
+                timeStamp = (Long) jsonObj.get("created_at") + 0L;
+            } catch (Exception ignored) {
+                timeStamp = (Long) jsonObj.get("timestamp");
+            }
+
+
+            Long limit = 0L;
+            try {
+                limit = (Long) jsonObj.get("limit");
+            } catch (Exception e) {
+                System.err.println("[Exception] no limit found in "	+ _jsonMessageBody);
+                return null;
+            }
+
+            return new RecommendationReq(domainID, itemID, userID, timeStamp, limit);
+
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+
+
 
 }

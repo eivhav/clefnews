@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class Article{
 
-    public Long item_id;
-    public Long domain_id;
+    public Long itemID;
+    public Long domainID;
     public Long created_date;
     public String title = "";
     public String text_content = "";
@@ -21,9 +21,21 @@ public class Article{
 
     public boolean recommendable = false;
 
-    public Article(Long item_id, Long domain_id, Long time){
-        this.item_id = item_id;
-        this.domain_id = domain_id;
+    public Article(Long itemID, Long domainID, Long time){
+        this.itemID = itemID;
+        this.domainID = domainID;
         this.created_date = time;
     }
+
+
+    public void print(boolean includeTitleAndText){
+        System.out.println("itemID:" + itemID + " domainID;" + domainID + " time:" + created_date + " rec:" +recommendable);
+        if(includeTitleAndText) {
+            System.out.println("Title: " + title);
+            System.out.println("Text: " + text_content);
+        }
+        System.out.println();
+    }
+
+
 }
