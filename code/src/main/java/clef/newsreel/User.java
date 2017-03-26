@@ -44,21 +44,47 @@ public class User{
 
         // Add to statistic for the current user at the current domain
         if(!statistics.containsKey(domain.domainID)){ statistics.put(domain.domainID, new UserStatistics()); }
-        statistics.get(domain.domainID).nb_recomendationRequest++;
+        statistics.get(domain.domainID).nb_recommendationRequests++;
 
     }
 
-    public void registerClickEvent(Domain domain){
-        //TODO
+    public void registerClickEvent(Domain domain, long previousArticleID, long clickedArticleID){
+
+        if(sessions.containsKey(domain.domainID) && sessions.get(domain.domainID).size() > 0) {
+
+            // Check if ClickEvent.itemID = session.lastArticle and ClickEvent.clickedArticles = lastRecommendation
+            Session currentSession = sessions.get(domain.domainID).get(sessions.get(domain.domainID).size() - 1);
+            if(currentSession.visits.size() > 0){
+
+                Visit lastVisit = currentSession.visits.get(currentSession.visits.size()-1);
+                if(lastVisit.article.itemID == previousArticleID && currentSession.lastRecommendation == clickedArticleID){
+                    statistics.get(domain.domainID).nb_sucssessfullRecs++;
+                }
+            }
+            currentSession.lastRecommendation = 0;
+        }
+
+        //statistics.get(domain.domainID).nb_clicks++;  // This gives null pointer exception
 
     }
+
+
+    public void printSessions(){
+        for(Long domainID : sessions.keySet()){
+            for (Session s : sessions.get(domainID)){
+                s.printSession();
+
+            }
+        }
+
+    }
+
 
 
 
     /**
      * A session is the recorded user behaviour(articles visited withinn a certain time frame).
      * A session ends when the user is inactive for a certain time window.
-     *
      */
 
     class Session{
@@ -77,6 +103,15 @@ public class User{
             timeLastVisit = visit.time;
         }
 
+        public void printSession(){
+            System.out.println("Session at " + domain.domainID);
+            for(Visit v : visits){
+                System.out.println(" Article visited: " + v.article.itemID + "\t" + new Date(v.time) + "\t" + v.article.title);
+            }
+            System.out.println();
+
+        }
+
 
     }
 
@@ -93,9 +128,9 @@ public class User{
     }
 
     class UserStatistics{
-        int nb_recomendationRequest = 0;
+        int nb_recommendationRequests = 0;
         int nb_clicks = 0;
-        int nb_sucsesssfullRecs = 0;
+        int nb_sucssessfullRecs = 0;
 
         public UserStatistics(){}
     }

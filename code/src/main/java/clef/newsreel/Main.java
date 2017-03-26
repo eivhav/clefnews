@@ -44,6 +44,10 @@ public class Main {
             }
         }
 
+        // The timing is inconsistent for recommendationReq objects, CHECK this
+        datastore.printUserSessions();
+
+
 
 
 
@@ -73,6 +77,8 @@ public class Main {
 
 
     }
+
+
 
 
 

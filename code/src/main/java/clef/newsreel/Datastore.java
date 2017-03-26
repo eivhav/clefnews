@@ -79,9 +79,25 @@ public class Datastore {
     }
 
     public void registerClickEvent(ClickEvent clickEvent){
-        //TODO
+        if(domains.containsKey(clickEvent.domainID) && users.containsKey(clickEvent.userID)) {
+            User user = users.get(clickEvent.userID);
+            if (clickEvent.clickedArticles.size() > 0) {
+                user.registerClickEvent(domains.get(clickEvent.domainID), clickEvent.itemID, clickEvent.clickedArticles.get(0));
+            }
+        }
+    }
 
 
+
+    public void printUserSessions(){
+        int count = 0;
+        for (Long userID : users.keySet()){
+            System.out.println("For User:" + userID);
+            users.get(userID).printSessions();
+            count++;
+            if(count > 1500){ break; }
+        }
+        System.out.println("#User:" + users.size());
 
     }
 
