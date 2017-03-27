@@ -21,7 +21,8 @@ public class Main {
 
     public static void main(String[] args){
 
-        String filePath = "/home/havikbot/Documents/";
+        String filePathLog = "/media/havikbot/F/CLEFdata/";
+        String filePathSer = "/home/havikbot/Documents/CLEFdata/";
         int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
@@ -30,7 +31,7 @@ public class Main {
         Recommender recommender = new Recommender(datastore);
 
 
-        ArrayList<Object> dataStream = dataloader.loadDataStream(filePath, fileNumbers);
+        ArrayList<Object> dataStream = dataloader.loadDataStream(filePathLog, filePathSer, fileNumbers);
 
 
         for(Object event : dataStream) {

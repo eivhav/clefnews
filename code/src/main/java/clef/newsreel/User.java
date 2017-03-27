@@ -53,7 +53,7 @@ public class User{
         long sessionTimeLimit = 30*60000L;      // 30 minutes
         Visit visit = new Visit(article, time);
 
-        // Pull the latest session if inside time window, else create new session
+        // Pull the latest session if inside the time window, else create new session
         if(!sessions.containsKey(domain.domainID)){ sessions.put(domain.domainID, new ArrayList<Session>()); }
         ArrayList<Session> sessionList = sessions.get(domain.domainID);
         if(sessionList.size() == 0 || time > (sessionTimeLimit + sessionList.get(sessionList.size()-1).timeLastVisit)){
@@ -65,7 +65,7 @@ public class User{
         if(!articlesVisited.containsKey(domain.domainID)){ articlesVisited.put(domain.domainID, new ArrayList<Visit>()); }
         articlesVisited.get(domain.domainID).add(visit);
 
-        // Remove from nonVisited list
+        // Remove from nonVisited list. No effect due to the performance issue
         if(articlesNotVisited.containsKey(domain.domainID) && articlesNotVisited.get(domain.domainID).containsKey(article.itemID)){
             articlesNotVisited.get(domain.domainID).remove(article.itemID);
         }

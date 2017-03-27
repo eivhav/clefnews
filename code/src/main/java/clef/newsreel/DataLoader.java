@@ -71,7 +71,7 @@ public class DataLoader implements Serializable  {
     }
 
 
-    public ArrayList<Object> loadDataStream(String filepath, int[] fileNumbers){
+    public ArrayList<Object> loadDataStream(String filepathLog, String filepathSer, int[] fileNumbers){
 
         String prefix = "nr2016-02-";
         ArrayList<Object> datastream = new ArrayList<Object>();
@@ -83,7 +83,7 @@ public class DataLoader implements Serializable  {
 
             ArrayList<Object> singleFileStream;
             try{
-                FileInputStream fileIn = new FileInputStream(filepath+fileName+".ser");
+                FileInputStream fileIn = new FileInputStream(filepathSer+fileName+".ser");
                 ObjectInputStream in = new ObjectInputStream(fileIn);
                 System.out.println("Reading serialized file: "+fileName+".ser");
                 singleFileStream = (ArrayList<Object>) in.readObject();
@@ -92,16 +92,16 @@ public class DataLoader implements Serializable  {
                 fileIn.close();
             }
             catch(IOException ioE){
-                System.out.println("Could not find .ser file. Reading from .log file at"+filepath+fileName+".log");
-                singleFileStream = parseFile(filepath, fileName+".log");
+                System.out.println("Could not find .ser file. Reading from .log file at"+filepathLog+fileName+".log");
+                singleFileStream = parseFile(filepathLog, fileName+".log");
                 datastream.addAll(singleFileStream);
                 try {
-                    FileOutputStream fileOut = new FileOutputStream(filepath+fileName+".ser");
+                    FileOutputStream fileOut = new FileOutputStream(filepathSer+fileName+".ser");
                     ObjectOutputStream out = new ObjectOutputStream(fileOut);
                     out.writeObject(singleFileStream);
                     out.close();
                     fileOut.close();
-                    System.out.println("Serialized data is saved in "+filepath+fileName+".ser");
+                    System.out.println("Serialized data is saved in "+filepathSer+fileName+".ser");
                 }
                 catch(IOException ioE2) {
                     ioE2.printStackTrace();
