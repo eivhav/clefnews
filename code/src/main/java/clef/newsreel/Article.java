@@ -47,6 +47,7 @@ public class Article{
 
     public void setKeyWords(HashMap<Long, Integer> kWords) {
 
+        if(kWords == null || kWords.size() == 0){ return; }
         if (keyWords.size() != 0 && kWords.size() > 0) {
             boolean isDiffrent = false;
             for (Long k : kWords.keySet()) {

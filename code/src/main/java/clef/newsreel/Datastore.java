@@ -12,6 +12,7 @@ import java.util.HashMap;
 import clef.newsreel.DataLoader.ItemUpdate;
 import clef.newsreel.DataLoader.ClickEvent;
 import clef.newsreel.DataLoader.RecommendationReq;
+import clef.newsreel.DataLoader.KeyWordsObject;
 
 /**
  * Created by havikbot on 23.03.17.
@@ -58,7 +59,9 @@ public class Datastore {
 
     // Maybe allow recommendationReq for articles not yet added by item_update?
 
-    public void registerRecommendationReq(RecommendationReq rec, Recommender recommender, boolean includeUnkownItems){
+    public void registerRecommendationReq(RecommendationReq rec, Recommender recommender,
+                                          boolean includeUnkownItems, KeyWordsObject keyWordsObject){
+
         if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
 
             // If user has not been seen before, crete new and add to user-HashMap
@@ -66,7 +69,8 @@ public class Datastore {
 
             User user = users.get(rec.userID);
             Article article = domains.get(rec.domainID).articles.get(rec.itemID);
-            if(rec.keyWords != null){  article.setKeyWords(rec.keyWords);}
+            article.setKeyWords(keyWordsObject.getKeyWords(rec.domainID, rec.itemID, rec.timeStamp));
+
 
             user.registerReqEventForUser(domains.get(rec.domainID), article, rec.timeStamp);
             article.user_visited.put(rec.userID, user);
@@ -85,7 +89,7 @@ public class Datastore {
                 Article article = domain.articles.get(rec.itemID);
                 article.updateInfo(domain, rec.timeStamp, "", "", true); // Should it be recommendable?
             }
-            registerRecommendationReq(rec, recommender, false);
+            registerRecommendationReq(rec, recommender, false, keyWordsObject);
         }
 
     }

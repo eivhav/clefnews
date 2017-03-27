@@ -60,18 +60,60 @@ public class DataLoader implements Serializable  {
         long userID;
         long timeStamp;
         long limit;         //max nb recommendations ro return
-        HashMap<Long, Integer> keyWords;
 
-        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp,
-                                 long limit, HashMap<Long, Integer> keyWords) {
+        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
             this.domainID = domainID;
             this.itemID = itemID;
             this.userID = userID;
             this.timeStamp = timeStamp;
             this.limit = limit;
-            this.keyWords = keyWords;
         }
     }
+
+    class KeyWordsObject implements Serializable {
+        HashMap<Long, HashMap<Long, HashMap<Long, HashMap<Long, Integer>>>> keyWordsMap =
+                new HashMap<Long, HashMap<Long, HashMap<Long, HashMap<Long, Integer>>>>();
+
+        public KeyWordsObject() {
+        }
+
+        public HashMap<Long, Integer> getKeyWords(long domainID, long itemID, long timestamp) {
+            if (keyWordsMap.containsKey(domainID) && keyWordsMap.get(domainID).containsKey(itemID)) {
+                long bestTime = 0;
+                for (long timeKey : keyWordsMap.get(domainID).get(itemID).keySet()) {
+                    if (timeKey <= timestamp && timeKey >= bestTime) {
+                        bestTime = timeKey;
+                    }
+                }
+                return keyWordsMap.get(domainID).get(itemID).get(bestTime);
+            }
+            return new HashMap<Long, Integer>();
+        }
+
+        public void addToKeyWords(long domainID, long itemID, long timestamp, HashMap<Long, Integer> keyWords) {
+            if (!keyWordsMap.containsKey(domainID)) {
+                keyWordsMap.put(domainID, new HashMap<Long, HashMap<Long, HashMap<Long, Integer>>>());
+            }
+            if (!keyWordsMap.get(domainID).containsKey(itemID)) {
+                keyWordsMap.get(domainID).put(itemID, new HashMap<Long, HashMap<Long, Integer>>());
+            }
+            if(keyWordsMap.get(domainID).get(itemID).size() == 0){
+                keyWordsMap.get(domainID).get(itemID).put(timestamp, keyWords);
+            }
+            else{
+                long bestKey = -10L;
+                for(long timeKey : keyWordsMap.get(domainID).get(itemID).keySet()){
+                    if(timeKey > bestKey){ bestKey = timeKey; }
+                }
+                if(!keyWordsMap.get(domainID).get(itemID).get(bestKey).equals(keyWords)){
+                    keyWordsMap.get(domainID).get(itemID).put(timestamp, keyWords);
+                }
+
+            }
+
+        }
+    }
+
 
 
     public ArrayList<Object> loadDataStream(String filepathLog, String filepathSer, int[] fileNumbers){
@@ -123,7 +165,9 @@ public class DataLoader implements Serializable  {
 
     private ArrayList<Object> parseFile(String path, String fileName){
 
+        KeyWordsObject keyWordsObject = new KeyWordsObject();
         ArrayList<Object> events = new ArrayList<Object>();
+        events.add(keyWordsObject);
         try{
             int[] counts = {0, 0, 0, 0, 0};     //[total_counts, item_updates, clicks, recommendations]
             int[] discarded = {0, 0, 0};
@@ -152,7 +196,8 @@ public class DataLoader implements Serializable  {
                     }
                 }
                 else if (line.substring(0,14).equals("recommendation")){
-                    RecommendationReq recommendationReq = parseRecommendationRequest(line.substring(23, line.length()-24));
+                    RecommendationReq recommendationReq =
+                            parseRecommendationRequest(line.substring(23, line.length()-24), keyWordsObject);
                     if(recommendationReq != null){
                         events.add(recommendationReq);
                         counts[3]++;
@@ -327,7 +372,7 @@ public class DataLoader implements Serializable  {
 
 
 
-    private RecommendationReq parseRecommendationRequest(String _jsonMessageBody) {
+    private RecommendationReq parseRecommendationRequest(String _jsonMessageBody, KeyWordsObject keyWordsObject) {
 
         try {
             final JSONObject jsonObj = (JSONObject) JSONValue.parse(_jsonMessageBody);
@@ -345,7 +390,7 @@ public class DataLoader implements Serializable  {
                 try {
                     domainID = Long.valueOf(jsonObjectContextSimple.get("domainId").toString());
                 } catch (Exception e) {
-                    System.err.println("[Exception] no domainID found in "+ _jsonMessageBody);
+                    System.err.println("[Exception] no domainID found in " + _jsonMessageBody);
                     return null;
                 }
             }
@@ -376,18 +421,6 @@ public class DataLoader implements Serializable  {
                 }
             }
 
-            HashMap<Long, Integer> keyWords = new HashMap<Long, Integer>();
-            try {
-                JSONObject keyWordCluster = (JSONObject) jsonObjectContextClusters.get("33");
-                for(Object key : keyWordCluster.keySet()){
-                    long longKey = Long.parseLong((String) key);
-                    int intValue = Integer.parseInt(keyWordCluster.get(key).toString());
-                    keyWords.put(longKey, intValue);
-                }
-            } catch (Exception e) {
-                keyWords = null;
-            }
-
 
             long timeStamp = 0;
             try {
@@ -395,6 +428,7 @@ public class DataLoader implements Serializable  {
             } catch (Exception ignored) {
                 timeStamp = (Long) jsonObj.get("timestamp");
             }
+
 
 
             Long limit = 0L;
@@ -405,7 +439,21 @@ public class DataLoader implements Serializable  {
                 return null;
             }
 
-            return new RecommendationReq(domainID, itemID, userID, timeStamp, limit, keyWords);
+            HashMap<Long, Integer> keyWords = new HashMap<Long, Integer>();
+            try {
+                JSONObject keyWordCluster = (JSONObject) jsonObjectContextClusters.get("33");
+                for (Object key : keyWordCluster.keySet()) {
+                    long longKey = Long.parseLong((String) key);
+                    int intValue = Integer.parseInt(keyWordCluster.get(key).toString());
+                    keyWords.put(longKey, intValue);
+                }
+                keyWordsObject.addToKeyWords(domainID, itemID, timeStamp, keyWords);
+
+            } catch (Exception e) {
+
+            }
+
+            return new RecommendationReq(domainID, itemID, userID, timeStamp, limit);
 
 
         } catch (Exception e) {

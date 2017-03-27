@@ -12,6 +12,7 @@ import java.util.Set;
 import clef.newsreel.DataLoader.ItemUpdate;
 import clef.newsreel.DataLoader.ClickEvent;
 import clef.newsreel.DataLoader.RecommendationReq;
+import clef.newsreel.DataLoader.KeyWordsObject;
 
 /**
  * Created by gram on 23.03.17.
@@ -22,9 +23,9 @@ public class Main {
 
     public static void main(String[] args){
 
-        String filePathLog = "/home/havikbot/Documents/CLEFdata/";
+        String filePathLog = "/media/havikbot/F/CLEFdata/";
         String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {6,6};  // {1,1} for 2016-02-01.log,
+        int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
@@ -38,12 +39,15 @@ public class Main {
         double size = dataStream.size();
         double lastProg = 0;
 
-        for(Object event : dataStream) {
+        KeyWordsObject keyWordsObject = null;
 
-            if (event instanceof ItemUpdate) {
+        for(Object event : dataStream) {
+            if (event instanceof KeyWordsObject) {
+                keyWordsObject = (KeyWordsObject) event;
+            } else if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
-                datastore.registerRecommendationReq((RecommendationReq) event, recommender, true);
+                datastore.registerRecommendationReq((RecommendationReq) event, recommender, true, keyWordsObject);
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
             }
