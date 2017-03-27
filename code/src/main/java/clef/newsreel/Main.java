@@ -6,6 +6,7 @@ import org.json.simple.JSONValue;
 import java.io.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Set;
 import clef.newsreel.DataLoader.ItemUpdate;
@@ -23,7 +24,7 @@ public class Main {
 
         String filePathLog = "/media/havikbot/F/CLEFdata/";
         String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
+        int[] fileNumbers = {1,4};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
@@ -33,8 +34,12 @@ public class Main {
 
         ArrayList<Object> dataStream = dataloader.loadDataStream(filePathLog, filePathSer, fileNumbers);
 
+        double count = 0;
+        double size = dataStream.size();
+        double lastProg = 0;
 
         for(Object event : dataStream) {
+
             if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
@@ -42,6 +47,17 @@ public class Main {
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
             }
+            double progress = (int) (100 * count / size);
+            if(progress != lastProg) {
+                System.out.print(progress + "% ");
+                lastProg = progress;
+                if(progress % 10 == 0) {
+                    System.out.print("\n");
+                }
+            }
+            count++;
+
+
         }
 
         // The timing is inconsistent for recommendationReq objects, CHECK this

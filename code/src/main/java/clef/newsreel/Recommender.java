@@ -17,7 +17,7 @@ public class Recommender {
     //TODO
 
     public long recommendArticle(Domain domain, User user){
-        return 0L;
+        return 0;
     }
 
 

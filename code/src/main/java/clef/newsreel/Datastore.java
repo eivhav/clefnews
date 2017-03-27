@@ -23,6 +23,8 @@ public class Datastore {
     public HashMap<Long, Domain> domains = new HashMap<Long, Domain> ();
     public HashMap<Long, User> users = new HashMap<Long, User>();
 
+    long[] total_timings = new long[9];
+
 
     public Datastore(){
 
@@ -54,15 +56,6 @@ public class Datastore {
         else{
             System.out.println("itemUpdate.itemID = 0;  " + itemUpdate.itemID);
         }
-        if(itemUpdate.domainID == 694){
-            //System.out.println("New article for 694");
-        }
-        if(itemUpdate.domainID ==  418){
-            //System.out.println("New article for 418");
-        }
-        if(itemUpdate.domainID == 13554){
-            System.out.println("New article for 13554");
-        }
     }
 
 
@@ -79,13 +72,9 @@ public class Datastore {
             article.user_visited.put(rec.userID, user);
 
             // Call recommendation algorithm
-            long recArticleID = recommender.recommendArticle(domains.get(rec.domainID), user);
+            long recArticleID = recommender.recommendArticle(null, null);
             user.registerRecommendation(domains.get(rec.domainID), recArticleID);
         }
-        else if(!domains.containsKey(rec.domainID)) {
-            //System.out.println("Tried to register REC, unfamiliar domain:" + rec.domainID);
-        }
-
 
     }
 

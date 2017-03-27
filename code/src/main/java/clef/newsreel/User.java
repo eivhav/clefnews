@@ -96,7 +96,7 @@ public class User{
     }
 
 
-    public void registerRecommendation(Domain domain, Long articleID){
+    public void registerRecommendation(Domain domain, long articleID){
         if(sessions.containsKey(domain.domainID) && sessions.get(domain.domainID).size()>0){
             Session currentSession = sessions.get(domain.domainID).get(sessions.get(domain.domainID).size() - 1);
             currentSession.lastRecommendation = articleID;
