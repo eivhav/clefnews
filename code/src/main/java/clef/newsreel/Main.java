@@ -56,9 +56,8 @@ public class Main {
                 }
             }
             count++;
-
-
         }
+        System.out.println("Complete");
 
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
