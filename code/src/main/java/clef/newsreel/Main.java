@@ -28,24 +28,24 @@ public class Main {
         DataLoader dataloader = new DataLoader();
         Datastore datastore = new Datastore();
         Recommender recommender = new Recommender(datastore);
-        ArrayList<Object> datastream = dataloader.loadDataStream(filePath, fileNumbers);
 
 
-        for(Object event : datastream) {
+        ArrayList<Object> dataStream = dataloader.loadDataStream(filePath, fileNumbers);
+
+
+        for(Object event : dataStream) {
             if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
-                datastore.registerRecommendationReq((RecommendationReq) event);
-                //TODO Run recommender and set user.latestSession[domainID].recomenderItem = recomended item
-
+                datastore.registerRecommendationReq((RecommendationReq) event, recommender);
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
-
             }
         }
 
         // The timing is inconsistent for recommendationReq objects, CHECK this
         datastore.printUserSessions();
+
 
 
 

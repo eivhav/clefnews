@@ -12,18 +12,41 @@ import clef.newsreel.Datastore.Domain;
 public class User{
 
     public Long userID;
-    public HashMap<Long, ArrayList<Visit>> articlesVisited = new HashMap<Long, ArrayList<Visit>>();  //<DomainID, List<Visit>>
+
     public HashMap<Long, ArrayList<Session>> sessions = new HashMap<Long, ArrayList<Session>>();    //<DomainID, List<Session>>
+    public HashMap<Long, ArrayList<Visit>> articlesVisited = new HashMap<Long, ArrayList<Visit>>();  //<DomainID, List<Visit>>
+    public HashMap<Long, HashMap<Long, Article>> articlesNotVisited = new HashMap<Long, HashMap<Long, Article>>();
     public HashMap<Long, UserStatistics> statistics = new HashMap<Long, UserStatistics>();
 
 
 
 
-    public User(Long userID){
+    public User(Long userID, HashMap<Long, Domain> domains){
         this.userID = userID;
         //Should we perhaps have som more info about our users?
 
+        /* // Performance problem
+        // New user means that we need to copy all articles into nonVisitedArticles
+        for(Long domainID : domains.keySet()){
+            HashMap<Long, Article> articles = domains.get(domainID).articles;
+            if(!articlesNotVisited.containsKey(domainID)){ articlesNotVisited.put(domainID, new HashMap<Long, Article>()); }
+            for(Long itemID : articles.keySet()) {
+                articlesNotVisited.get(domainID).put(itemID, articles.get(itemID));
+            }
+        }
+         */
     }
+
+
+    public void addNewArticle(Domain domain, Article article) {
+        if (!articlesNotVisited.containsKey(domain.domainID)) {
+            articlesNotVisited.put(domain.domainID, new HashMap<Long, Article>());
+        }
+        if (!articlesNotVisited.get(domain.domainID).containsKey(article.itemID)) {
+            articlesNotVisited.get(domain.domainID).put(article.itemID, article);
+        }
+    }
+
 
     public void registerReqEventForUser(Domain domain, Article article, long time){
 
@@ -33,7 +56,7 @@ public class User{
         // Pull the latest session if inside time window, else create new session
         if(!sessions.containsKey(domain.domainID)){ sessions.put(domain.domainID, new ArrayList<Session>()); }
         ArrayList<Session> sessionList = sessions.get(domain.domainID);
-        if(sessionList.size() == 0 || time - sessionTimeLimit > sessionList.get(sessionList.size()-1).timeLastVisit){
+        if(sessionList.size() == 0 || time > (sessionTimeLimit + sessionList.get(sessionList.size()-1).timeLastVisit)){
             sessionList.add(new Session(domain));
         }
         sessionList.get(sessionList.size()-1).addVisit(visit);
@@ -42,11 +65,17 @@ public class User{
         if(!articlesVisited.containsKey(domain.domainID)){ articlesVisited.put(domain.domainID, new ArrayList<Visit>()); }
         articlesVisited.get(domain.domainID).add(visit);
 
+        // Remove from nonVisited list
+        if(articlesNotVisited.containsKey(domain.domainID) && articlesNotVisited.get(domain.domainID).containsKey(article.itemID)){
+            articlesNotVisited.get(domain.domainID).remove(article.itemID);
+        }
+
         // Add to statistic for the current user at the current domain
         if(!statistics.containsKey(domain.domainID)){ statistics.put(domain.domainID, new UserStatistics()); }
         statistics.get(domain.domainID).nb_recommendationRequests++;
 
     }
+
 
     public void registerClickEvent(Domain domain, long previousArticleID, long clickedArticleID){
 
@@ -62,10 +91,16 @@ public class User{
                 }
             }
             currentSession.lastRecommendation = 0;
+            statistics.get(domain.domainID).nb_clicks++;
         }
+    }
 
-        //statistics.get(domain.domainID).nb_clicks++;  // This gives null pointer exception
 
+    public void registerRecommendation(Domain domain, Long articleID){
+        if(sessions.containsKey(domain.domainID) && sessions.get(domain.domainID).size()>0){
+            Session currentSession = sessions.get(domain.domainID).get(sessions.get(domain.domainID).size() - 1);
+            currentSession.lastRecommendation = articleID;
+        }
     }
 
 
@@ -73,13 +108,9 @@ public class User{
         for(Long domainID : sessions.keySet()){
             for (Session s : sessions.get(domainID)){
                 s.printSession();
-
             }
         }
-
     }
-
-
 
 
     /**
@@ -91,7 +122,7 @@ public class User{
 
         Domain domain;
         ArrayList<Visit> visits = new ArrayList<Visit>();
-        long lastRecommendation = 0;        // Set by the recomender
+        long lastRecommendation = 0;        // Set by the recommender
         long timeLastVisit = 0;
 
         public Session(Domain domain){
@@ -111,7 +142,6 @@ public class User{
             System.out.println();
 
         }
-
 
     }
 

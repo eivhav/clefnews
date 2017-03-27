@@ -19,11 +19,14 @@ import clef.newsreel.DataLoader.RecommendationReq;
 public class Datastore {
 
 
+
     public HashMap<Long, Domain> domains = new HashMap<Long, Domain> ();
     public HashMap<Long, User> users = new HashMap<Long, User>();
 
 
-    public Datastore(){}
+    public Datastore(){
+
+    }
 
     public class Domain{
         long domainID;
@@ -51,6 +54,7 @@ public class Datastore {
             } else {
                 article = new Article(itemUpdate.itemID, domains.get(itemUpdate.domainID), itemUpdate.created_date);
                 articles.put(itemUpdate.itemID, article);
+                //addArticleToUsers(domains.get(itemUpdate.domainID), article);     // Performance problem
             }
             article.title = itemUpdate.title;
             article.text_content = itemUpdate.text;
@@ -62,17 +66,28 @@ public class Datastore {
         }
     }
 
+    public void addArticleToUsers(Domain domain, Article article){
+        for (Long userID : users.keySet()){
+            users.get(userID).addNewArticle(domain, article);
+        }
+    }
 
-    public void registerRecommendationReq(RecommendationReq rec){
+
+
+    public void registerRecommendationReq(RecommendationReq rec, Recommender recommender){
         if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
 
             // If user has not been seen before, crete new and add to user-HashMap
-            if(!users.containsKey(rec.userID)){ users.put(rec.userID, new User(rec.userID)); }
+            if(!users.containsKey(rec.userID)){ users.put(rec.userID, new User(rec.userID, domains)); }
 
             User user = users.get(rec.userID);
             Article article = domains.get(rec.domainID).articles.get(rec.itemID);
             user.registerReqEventForUser(domains.get(rec.domainID), article, rec.timeStamp);
             article.user_visited.put(rec.userID, user);
+
+            // Call recommendation algorithm
+            long recArticleID = recommender.recommendArticle(domains.get(rec.domainID), user);
+            user.registerRecommendation(domains.get(rec.domainID), recArticleID);
         }
 
 
@@ -86,6 +101,8 @@ public class Datastore {
             }
         }
     }
+
+
 
 
 
