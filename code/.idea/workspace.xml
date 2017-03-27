@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="4e186207-3dbe-4d74-8cc1-ec176764d22e" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -77,8 +76,8 @@
       <file leaf-file-name="DataLoader.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="148">
-              <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+            <state relative-caret-position="526">
+              <caret line="262" column="17" lean-forward="true" selection-start-line="262" selection-start-column="17" selection-end-line="262" selection-end-column="17" />
               <folding>
                 <element signature="imports" expanded="true" />
               </folding>
@@ -833,7 +832,7 @@
       <workItem from="1490597908039" duration="18758000" />
       <workItem from="1490616692326" duration="675000" />
       <workItem from="1490617397593" duration="682000" />
-      <workItem from="1490618142771" duration="1254000" />
+      <workItem from="1490618142771" duration="1395000" />
     </task>
     <task id="LOCAL-00001" summary="A lot of work done&#10;">
       <created>1490535686213</created>
@@ -926,11 +925,18 @@
       <option name="project" value="LOCAL" />
       <updated>1490619255791</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="Evaluation method complete. Only rec-algorithms remaining&#10;">
+      <created>1490619400874</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1490619400874</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="57719000" />
+    <option name="totallyTimeSpent" value="57860000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="51" y="456" width="2509" height="1416" extended-state="6" />
@@ -1442,8 +1448,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="148">
-          <caret line="22" column="22" lean-forward="true" selection-start-line="22" selection-start-column="22" selection-end-line="22" selection-end-column="22" />
+        <state relative-caret-position="526">
+          <caret line="262" column="17" lean-forward="true" selection-start-line="262" selection-start-column="17" selection-end-line="262" selection-end-column="17" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
