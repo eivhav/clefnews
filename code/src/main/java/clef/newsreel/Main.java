@@ -47,13 +47,10 @@ public class Main {
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
             }
-            double progress = (int) (100 * count / size);
+            double progress = (int) (20 * count / size);
             if(progress != lastProg) {
-                System.out.print(progress + "% ");
+                System.out.print(5*progress + "% ");
                 lastProg = progress;
-                if(progress % 10 == 0) {
-                    System.out.print("\n");
-                }
             }
             count++;
         }
