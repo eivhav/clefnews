@@ -54,6 +54,15 @@ public class Datastore {
         else{
             System.out.println("itemUpdate.itemID = 0;  " + itemUpdate.itemID);
         }
+        if(itemUpdate.domainID == 694){
+            //System.out.println("New article for 694");
+        }
+        if(itemUpdate.domainID ==  418){
+            //System.out.println("New article for 418");
+        }
+        if(itemUpdate.domainID == 13554){
+            System.out.println("New article for 13554");
+        }
     }
 
 
@@ -73,6 +82,9 @@ public class Datastore {
             long recArticleID = recommender.recommendArticle(domains.get(rec.domainID), user);
             user.registerRecommendation(domains.get(rec.domainID), recArticleID);
         }
+        else if(!domains.containsKey(rec.domainID)) {
+            //System.out.println("Tried to register REC, unfamiliar domain:" + rec.domainID);
+        }
 
 
     }
@@ -84,6 +96,10 @@ public class Datastore {
                 user.registerClickEvent(domains.get(clickEvent.domainID), clickEvent.itemID, clickEvent.clickedArticles.get(0));
             }
         }
+
+
+
+
     }
 
 

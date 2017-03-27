@@ -44,7 +44,8 @@ public class Main {
         }
 
         // The timing is inconsistent for recommendationReq objects, CHECK this
-        datastore.printUserSessions();
+        //datastore.printUserSessions();
+        evaluation(datastore);
 
 
 
@@ -78,10 +79,41 @@ public class Main {
 
     }
 
-    public void evaluation(Datastore datastore){
+    public static void evaluation(Datastore datastore){
+        System.out.println("Running Evaluation");
+        int[] overallScores = new int[3];   //[nb_recs, nb_clicks, nb_sucsessfullRecs]
+        for(Long domainID : datastore.domains.keySet()){
+            int[] domainScores = new int[3];
+            int nb_users = 0;
+            for(Long userID : datastore.users.keySet()){
+                if(datastore.users.get(userID).statistics.containsKey(domainID)){
+                    domainScores[0] += datastore.users.get(userID).statistics.get(domainID).nb_recommendationRequests;
+                    domainScores[1] += datastore.users.get(userID).statistics.get(domainID).nb_clicks;
+                    domainScores[2] += datastore.users.get(userID).statistics.get(domainID).nb_sucssessfullRecs;
+                    nb_users++;
+                }
+            }
+            calcAndPrintScores(domainScores, "For Domain: " + domainID);
+            for(int i = 0; i < 3; i++){
+                overallScores[i] += domainScores[i];
+            }
+        }
+        calcAndPrintScores(overallScores, "For Entire dataset:");
 
     }
 
+    public static void calcAndPrintScores(int[] scores, String title){
+        double percentAllreqs = 100*(double)scores[2] / (double) scores[0];
+        double percentClicks = 100*(double)scores[2] / (double) scores[1];
+        System.out.println(fixedLengthString(title, 20) + "\t" +
+                fixedLengthString("[" +scores[0] +", " + scores[1] + ", " + scores[2] +" ] ", 20) + "\t" +
+                "[" + String.format( "%.5f", percentAllreqs) +", " + String.format( "%.5f", percentClicks) + "]");
+
+    }
+
+    public static String fixedLengthString(String string, int length) {
+        return String.format("%1$"+length+ "s", string);
+    }
 
 
 
