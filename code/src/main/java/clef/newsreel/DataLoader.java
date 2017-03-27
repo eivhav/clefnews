@@ -60,13 +60,16 @@ public class DataLoader implements Serializable  {
         long userID;
         long timeStamp;
         long limit;         //max nb recommendations ro return
+        HashMap<Long, Integer> keyWords;
 
-        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp, long limit) {
+        public RecommendationReq(long domainID, long itemID, long userID, long timeStamp,
+                                 long limit, HashMap<Long, Integer> keyWords) {
             this.domainID = domainID;
             this.itemID = itemID;
             this.userID = userID;
             this.timeStamp = timeStamp;
             this.limit = limit;
+            this.keyWords = keyWords;
         }
     }
 
@@ -125,7 +128,7 @@ public class DataLoader implements Serializable  {
             int[] counts = {0, 0, 0, 0, 0};     //[total_counts, item_updates, clicks, recommendations]
             int[] discarded = {0, 0, 0};
             BufferedReader br = new BufferedReader(new FileReader(path+fileName));
-            for(String line; (line = br.readLine()) != null; ) {
+            for(String line; (line = br.readLine()) != null;) {
                 counts[0]++;
 
                 if(line.substring(0,11).equals("item_update")){
@@ -332,6 +335,8 @@ public class DataLoader implements Serializable  {
             // parse JSON structure to obtain "context.simple"
             JSONObject jsonObjectContext = (JSONObject) jsonObj.get("context");
             JSONObject jsonObjectContextSimple = (JSONObject) jsonObjectContext.get("simple");
+            JSONObject jsonObjectContextClusters = (JSONObject) jsonObjectContext.get("clusters");
+
 
             Long domainID = -3L;
             try {
@@ -371,6 +376,19 @@ public class DataLoader implements Serializable  {
                 }
             }
 
+            HashMap<Long, Integer> keyWords = new HashMap<Long, Integer>();
+            try {
+                JSONObject keyWordCluster = (JSONObject) jsonObjectContextClusters.get("33");
+                for(Object key : keyWordCluster.keySet()){
+                    long longKey = Long.parseLong((String) key);
+                    int intValue = Integer.parseInt(keyWordCluster.get(key).toString());
+                    keyWords.put(longKey, intValue);
+                }
+            } catch (Exception e) {
+                keyWords = null;
+            }
+
+
             long timeStamp = 0;
             try {
                 timeStamp = (Long) jsonObj.get("created_at") + 0L;
@@ -387,7 +405,7 @@ public class DataLoader implements Serializable  {
                 return null;
             }
 
-            return new RecommendationReq(domainID, itemID, userID, timeStamp, limit);
+            return new RecommendationReq(domainID, itemID, userID, timeStamp, limit, keyWords);
 
 
         } catch (Exception e) {

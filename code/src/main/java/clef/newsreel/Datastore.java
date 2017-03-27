@@ -23,8 +23,6 @@ public class Datastore {
     public HashMap<Long, Domain> domains = new HashMap<Long, Domain> ();
     public HashMap<Long, User> users = new HashMap<Long, User>();
 
-    long[] total_timings = new long[9];
-
 
     public Datastore(){
 
@@ -68,6 +66,8 @@ public class Datastore {
 
             User user = users.get(rec.userID);
             Article article = domains.get(rec.domainID).articles.get(rec.itemID);
+            if(rec.keyWords != null){  article.setKeyWords(rec.keyWords);}
+
             user.registerReqEventForUser(domains.get(rec.domainID), article, rec.timeStamp);
             article.user_visited.put(rec.userID, user);
 

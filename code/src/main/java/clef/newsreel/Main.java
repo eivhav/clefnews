@@ -22,9 +22,9 @@ public class Main {
 
     public static void main(String[] args){
 
-        String filePathLog = "/media/havikbot/F/CLEFdata/";
+        String filePathLog = "/home/havikbot/Documents/CLEFdata/";
         String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,4};  // {1,1} for 2016-02-01.log,
+        int[] fileNumbers = {6,6};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();

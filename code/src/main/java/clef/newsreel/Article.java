@@ -17,7 +17,7 @@ public class Article{
     public String title = "";
     public String text_content = "";
 
-    public ArrayList<Integer> keywords = new ArrayList<Integer>();
+    public HashMap<Long, Integer> keyWords = new HashMap<Long, Integer>();
     public HashMap<Long, User> user_visited = new HashMap<Long, User>();
 
     public boolean recommendable = false;
@@ -45,5 +45,30 @@ public class Article{
 
     }
 
+    public void setKeyWords(HashMap<Long, Integer> kWords) {
+
+        if (keyWords.size() != 0) {
+            boolean isDiffrent = false;
+            for (Long k : kWords.keySet()) {
+                if (!keyWords.containsKey(k) || (int) keyWords.get(k) != (int) kWords.get(k)) {
+                    isDiffrent = true;
+                }
+            }
+            for (Long k : keyWords.keySet()) {
+                if (!kWords.containsKey(k) || (int) keyWords.get(k) != (int) kWords.get(k)) {
+                    isDiffrent = true;
+                }
+            }
+
+            if(isDiffrent){ System.out.println("Keywords changed");}
+
+        }
+        keyWords = new HashMap<Long, Integer>();
+        for (Long k : kWords.keySet()) {
+            long key = k;
+            int value = kWords.get(k);
+            keyWords.put(key, value);
+        }
+    }
 
 }
