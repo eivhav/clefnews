@@ -86,20 +86,22 @@ public class User{
             if(currentSession.visits.size() > 0){
 
                 Visit lastVisit = currentSession.visits.get(currentSession.visits.size()-1);
-                if(lastVisit.article.itemID == previousArticleID && currentSession.lastRecommendation == clickedArticleID){
-                    statistics.get(domain.domainID).nb_sucssessfullRecs++;
+                if(lastVisit.article.itemID == previousArticleID) {
+                    if (currentSession.lastRecommendations.contains(clickedArticleID)) {        //This may not be effictive
+                        statistics.get(domain.domainID).nb_sucssessfullRecs++;
+                    }
                 }
             }
-            currentSession.lastRecommendation = 0;
+            currentSession.lastRecommendations = new ArrayList<Long>();
             statistics.get(domain.domainID).nb_clicks++;
         }
     }
 
 
-    public void registerRecommendation(Domain domain, long articleID){
+    public void registerRecommendation(Domain domain, ArrayList<Long> articleIDs){
         if(sessions.containsKey(domain.domainID) && sessions.get(domain.domainID).size()>0){
             Session currentSession = sessions.get(domain.domainID).get(sessions.get(domain.domainID).size() - 1);
-            currentSession.lastRecommendation = articleID;
+            currentSession.lastRecommendations = articleIDs;
         }
     }
 
@@ -122,7 +124,7 @@ public class User{
 
         Domain domain;
         ArrayList<Visit> visits = new ArrayList<Visit>();
-        long lastRecommendation = 0;        // Set by the recommender
+        ArrayList<Long> lastRecommendations = new ArrayList<Long>();        // Set by the recommender
         long timeLastVisit = 0;
 
         public Session(Domain domain){

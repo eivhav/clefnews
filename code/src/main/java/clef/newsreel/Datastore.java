@@ -56,7 +56,7 @@ public class Datastore {
         }
     }
 
-
+    // Maybe allow recommendationReq for articles not yet added by item_update?
 
     public void registerRecommendationReq(RecommendationReq rec, Recommender recommender){
         if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
@@ -72,8 +72,8 @@ public class Datastore {
             article.user_visited.put(rec.userID, user);
 
             // Call recommendation algorithm
-            long recArticleID = recommender.recommendArticle(null, null);
-            user.registerRecommendation(domains.get(rec.domainID), recArticleID);
+            ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), user);
+            user.registerRecommendation(domains.get(rec.domainID), recArticleIDs);
         }
 
     }

@@ -3,10 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="3b69bdee-513a-4a96-bbe0-6c9bdff0445c" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/clef/newsreel/User.java" afterPath="$PROJECT_DIR$/src/main/java/clef/newsreel/User.java" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -26,8 +25,8 @@
       <file leaf-file-name="Datastore.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+            <state relative-caret-position="720">
+              <caret line="92" column="0" lean-forward="true" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -48,9 +47,13 @@
       <file leaf-file-name="Recommender.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="126">
-              <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-              <folding />
+            <state relative-caret-position="432">
+              <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#361#362#0" expanded="true" />
+                <element signature="e#405#406#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -58,10 +61,11 @@
       <file leaf-file-name="User.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/User.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="50" column="66" lean-forward="false" selection-start-line="50" selection-start-column="66" selection-end-line="50" selection-end-column="66" />
+            <state relative-caret-position="573">
+              <caret line="100" column="33" lean-forward="false" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
               <folding>
-                <marker date="1490634955473" expanded="true" signature="31:41" ph="..." />
+                <element signature="e#5260#5266#0" expanded="true" />
+                <marker date="1490645144753" expanded="true" signature="31:41" ph="..." />
               </folding>
             </state>
           </provider>
@@ -132,12 +136,13 @@
       <list>
         <option value="$PROJECT_DIR$/src/main/java/de/dailab/plistacontest/client/ContestHandler.java" />
         <option value="$PROJECT_DIR$/src/main/java/de/dailab/plistacontest/client/RecommenderItem.java" />
-        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/User.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/JSONparsers.java" />
         <option value="$USER_HOME$/.IntelliJIdea2016.3/idea64.vmoptions" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/DataLoader.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java" />
+        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/User.java" />
+        <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java" />
         <option value="$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java" />
       </list>
     </option>
@@ -880,7 +885,7 @@
       <workItem from="1490292714015" duration="193000" />
       <workItem from="1490292924923" duration="8432000" />
       <workItem from="1490634949589" duration="1378000" />
-      <workItem from="1490636359681" duration="7117000" />
+      <workItem from="1490636359681" duration="8416000" />
     </task>
     <task id="LOCAL-00001" summary="msg">
       <created>1490283112098</created>
@@ -896,11 +901,18 @@
       <option name="project" value="LOCAL" />
       <updated>1490301709670</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="fixed Keywords">
+      <created>1490643862464</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1490643862464</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="17577000" />
+    <option name="totallyTimeSpent" value="18876000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="57" y="24" width="2503" height="1416" extended-state="6" />
@@ -976,7 +988,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="msg" />
-    <option name="LAST_COMMIT_MESSAGE" value="msg" />
+    <MESSAGE value="fixed Keywords" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed Keywords" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -1010,7 +1023,8 @@
         <state relative-caret-position="2952">
           <caret line="169" column="1" lean-forward="false" selection-start-line="169" selection-start-column="1" selection-end-line="169" selection-end-column="1" />
           <folding>
-            <marker date="1490634955473" expanded="true" signature="31:41" ph="..." />
+            <element signature="e#5260#5266#0" expanded="true" />
+            <marker date="1490645144753" expanded="true" signature="31:41" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1071,7 +1085,8 @@
         <state relative-caret-position="288">
           <caret line="19" column="1" lean-forward="true" selection-start-line="19" selection-start-column="1" selection-end-line="19" selection-end-column="1" />
           <folding>
-            <marker date="1490634955473" expanded="true" signature="31:41" ph="..." />
+            <element signature="e#5260#5266#0" expanded="true" />
+            <marker date="1490645144753" expanded="true" signature="31:41" ph="..." />
           </folding>
         </state>
       </provider>
@@ -1176,14 +1191,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="126">
-          <caret line="7" column="13" lean-forward="false" selection-start-line="7" selection-start-column="13" selection-end-line="7" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Article.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1152">
@@ -1221,16 +1228,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/User.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="50" column="66" lean-forward="false" selection-start-line="50" selection-start-column="66" selection-end-line="50" selection-end-column="66" />
-          <folding>
-            <marker date="1490634955473" expanded="true" signature="31:41" ph="..." />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Main.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="360">
@@ -1239,10 +1236,33 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/User.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="573">
+          <caret line="100" column="33" lean-forward="false" selection-start-line="100" selection-start-column="33" selection-end-line="100" selection-end-column="33" />
+          <folding>
+            <element signature="e#5260#5266#0" expanded="true" />
+            <marker date="1490645144753" expanded="true" signature="31:41" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Recommender.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="432">
+          <caret line="26" column="0" lean-forward="false" selection-start-line="26" selection-start-column="0" selection-end-line="26" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#361#362#0" expanded="true" />
+            <element signature="e#405#406#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/clef/newsreel/Datastore.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
-          <caret line="29" column="0" lean-forward="true" selection-start-line="29" selection-start-column="0" selection-end-line="29" selection-end-column="0" />
+        <state relative-caret-position="720">
+          <caret line="92" column="0" lean-forward="true" selection-start-line="92" selection-start-column="0" selection-end-line="92" selection-end-column="0" />
           <folding />
         </state>
       </provider>
