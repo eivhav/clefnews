@@ -40,35 +40,19 @@ public class Datastore {
 
     public void registerArticle(ItemUpdate itemUpdate){
 
-        if(!domains.containsKey(itemUpdate.domainID)){
-            domains.put(itemUpdate.domainID, new Domain(itemUpdate.domainID));
-        }
-        HashMap<Long, Article> articles = domains.get(itemUpdate.domainID).articles;
+        if(!domains.containsKey(itemUpdate.domainID)){ domains.put(itemUpdate.domainID, new Domain(itemUpdate.domainID));}
+        Domain domain = domains.get(itemUpdate.domainID);
+
         if(itemUpdate.itemID != 0) {
-            Article article;
-            if (articles.containsKey(itemUpdate.itemID)) {
-                article = articles.get(itemUpdate.itemID);
-                article.domain = domains.get(itemUpdate.domainID);
-                article.created_date = itemUpdate.created_date;
-
-            } else {
-                article = new Article(itemUpdate.itemID, domains.get(itemUpdate.domainID), itemUpdate.created_date);
-                articles.put(itemUpdate.itemID, article);
-                //addArticleToUsers(domains.get(itemUpdate.domainID), article);     // Performance problem
+            if (!domain.articles.containsKey(itemUpdate.itemID)) {
+                domain.articles.put(itemUpdate.itemID, new Article(itemUpdate.itemID));
+                //addArticleToUsers(domain,  domain.articles.get(itemUpdate.itemID));     // Performance problem
             }
-            article.title = itemUpdate.title;
-            article.text_content = itemUpdate.text;
-            article.recommendable = itemUpdate.recommendable;
-
+            Article article = domain.articles.get(itemUpdate.itemID);
+            article.updateInfo(domain, itemUpdate.created_date, itemUpdate.title, itemUpdate.text, itemUpdate.recommendable);
         }
         else{
             System.out.println("itemUpdate.itemID = 0;  " + itemUpdate.itemID);
-        }
-    }
-
-    public void addArticleToUsers(Domain domain, Article article){
-        for (Long userID : users.keySet()){
-            users.get(userID).addNewArticle(domain, article);
         }
     }
 
@@ -102,6 +86,13 @@ public class Datastore {
         }
     }
 
+
+    // Not used due to performance problem
+    public void addArticleToUsers(Domain domain, Article article){
+        for (Long userID : users.keySet()){
+            users.get(userID).addNewArticle(domain, article);
+        }
+    }
 
 
 

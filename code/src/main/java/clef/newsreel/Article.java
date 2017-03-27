@@ -22,10 +22,8 @@ public class Article{
 
     public boolean recommendable = false;
 
-    public Article(Long itemID, Domain domain, Long time){
+    public Article(Long itemID){
         this.itemID = itemID;
-        this.domain = domain;
-        this.created_date = time;
     }
 
 
@@ -36,6 +34,15 @@ public class Article{
             System.out.println("Text: " + text_content);
         }
         System.out.println();
+    }
+
+    public void updateInfo(Domain domain, long time, String title, String text, boolean rec){
+        this.domain = domain;
+        this.created_date = time;
+        this.title = title;
+        this.text_content = text;
+        this.recommendable = rec;
+
     }
 
 
