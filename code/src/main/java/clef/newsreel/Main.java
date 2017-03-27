@@ -43,7 +43,7 @@ public class Main {
             if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
-                datastore.registerRecommendationReq((RecommendationReq) event, recommender);
+                datastore.registerRecommendationReq((RecommendationReq) event, recommender, true);
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
             }

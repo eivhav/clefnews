@@ -128,7 +128,7 @@ public class DataLoader implements Serializable  {
             int[] counts = {0, 0, 0, 0, 0};     //[total_counts, item_updates, clicks, recommendations]
             int[] discarded = {0, 0, 0};
             BufferedReader br = new BufferedReader(new FileReader(path+fileName));
-            for(String line; (line = br.readLine()) != null;) {
+            for(String line; (line = br.readLine()) != null;  ) {
                 counts[0]++;
 
                 if(line.substring(0,11).equals("item_update")){

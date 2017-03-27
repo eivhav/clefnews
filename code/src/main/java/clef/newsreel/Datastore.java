@@ -58,7 +58,7 @@ public class Datastore {
 
     // Maybe allow recommendationReq for articles not yet added by item_update?
 
-    public void registerRecommendationReq(RecommendationReq rec, Recommender recommender){
+    public void registerRecommendationReq(RecommendationReq rec, Recommender recommender, boolean includeUnkownItems){
         if(domains.containsKey(rec.domainID) && domains.get(rec.domainID).articles.containsKey(rec.itemID)){
 
             // If user has not been seen before, crete new and add to user-HashMap
@@ -75,8 +75,21 @@ public class Datastore {
             ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), user);
             user.registerRecommendation(domains.get(rec.domainID), recArticleIDs);
         }
+        // This part add articles not added by item_update
+        else if(includeUnkownItems){
+            if(!domains.containsKey(rec.domainID)){ domains.put(rec.domainID, new Domain(rec.domainID));}
+
+            Domain domain = domains.get(rec.domainID);
+            if(!domain.articles.containsKey(rec.itemID)) {
+                domain.articles.put(rec.itemID, new Article(rec.itemID));
+                Article article = domain.articles.get(rec.itemID);
+                article.updateInfo(domain, rec.timeStamp, "", "", true); // Should it be recommendable?
+            }
+            registerRecommendationReq(rec, recommender, false);
+        }
 
     }
+
 
     public void registerClickEvent(ClickEvent clickEvent){
         if(domains.containsKey(clickEvent.domainID) && users.containsKey(clickEvent.userID)) {
