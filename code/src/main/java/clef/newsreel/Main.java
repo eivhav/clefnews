@@ -1,18 +1,6 @@
 package clef.newsreel;
 
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 import java.io.*;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Set;
-import clef.newsreel.DataLoader.ItemUpdate;
-import clef.newsreel.DataLoader.ClickEvent;
-import clef.newsreel.DataLoader.RecommendationReq;
-import clef.newsreel.DataLoader.KeyWordsObject;
 
 /**
  * Created by gram on 23.03.17.
@@ -21,10 +9,10 @@ public class Main {
 
 
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
-        String filePathLog = "/media/havikbot/F/CLEFdata/";
-        String filePathSer = "/home/havikbot/Documents/CLEFdata/";
+        /*String filePathLog = "/Users/zhanglemei/Documents/project/dataset/newsreel2017/";
+        String filePathSer = "/Users/zhanglemei/Documents/project/dataset/tempfile/";
         int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
@@ -62,9 +50,47 @@ public class Main {
 
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
-        evaluation(datastore);
+        evaluation(datastore);*/
 
 
+        //python test code
+        System.out.println("Python test begin!");
+        String fileName = "/Users/zhanglemei/Documents/project/dataset/testfile/test.txt";
+        File file = new File(fileName);
+        BufferedReader reader = null;
+        try {
+            System.out.println("Read file by line: ");
+            reader = new BufferedReader(new FileReader(file));
+            String tempString = null;
+            int lineNum = 1;
+            while ((tempString = reader.readLine()) != null) {
+                System.out.println(">>>Read line " + lineNum + ": " + tempString);
+                Process pr = Runtime.getRuntime().exec("python /Users/zhanglemei/Documents/project/clefnews/code/src/main/python/client.py --data " + tempString);
+                BufferedReader in = new BufferedReader(new InputStreamReader(pr.getInputStream()));
+                String line;
+                while ((line = in.readLine()) != null) {
+                    System.out.println(line);
+                }
+                in.close();
+                pr.waitFor();
+                lineNum++;
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }finally {
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (IOException e1) {
+                }
+            }
+        }
+
+        System.out.println("Python test end!");
+    }
 
 
 
@@ -91,10 +117,10 @@ public class Main {
             }
         }
 
-         */
 
 
-    }
+
+    }*/
 
     public static void evaluation(Datastore datastore){
         System.out.println("Running Evaluation");
