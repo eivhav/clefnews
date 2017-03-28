@@ -109,13 +109,6 @@ public class Datastore {
     }
 
 
-    // Not used due to performance problem
-    public void addArticleToUsers(Domain domain, Article article){
-        for (Long userID : users.keySet()){
-            users.get(userID).addNewArticle(domain, article);
-        }
-    }
-
 
 
 
