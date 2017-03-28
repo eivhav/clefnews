@@ -79,7 +79,7 @@ public class Datastore {
             ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), user);
             user.registerRecommendation(domains.get(rec.domainID), recArticleIDs);
         }
-        // This part add articles not added by item_update
+        // This part adds articles not added by item_update
         else if(includeUnkownItems){
             if(!domains.containsKey(rec.domainID)){ domains.put(rec.domainID, new Domain(rec.domainID));}
 
