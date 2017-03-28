@@ -25,7 +25,7 @@ public class Main {
 
         String filePathLog = "/media/havikbot/F/CLEFdata/";
         String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,9};  // {1,1} for 2016-02-01.log,
+        int[] fileNumbers = {1,5};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
@@ -60,9 +60,12 @@ public class Main {
         }
         System.out.println("Complete");
 
+        System.out.println("keywords size:" + datastore.all_keywords.size());
+
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
         evaluation(datastore);
+
 
 
 

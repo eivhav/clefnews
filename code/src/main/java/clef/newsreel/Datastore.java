@@ -6,9 +6,8 @@ import org.json.simple.JSONValue;
 import java.io.BufferedReader;
 import java.io.FileReader;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
+
 import clef.newsreel.DataLoader.ItemUpdate;
 import clef.newsreel.DataLoader.ClickEvent;
 import clef.newsreel.DataLoader.RecommendationReq;
@@ -19,7 +18,7 @@ import clef.newsreel.DataLoader.KeyWordsObject;
  */
 public class Datastore {
 
-
+    public Set<Long> all_keywords = new HashSet<Long>();
 
     public HashMap<Long, Domain> domains = new HashMap<Long, Domain> ();
     public HashMap<Long, User> users = new HashMap<Long, User>();
@@ -32,6 +31,7 @@ public class Datastore {
     public class Domain{
         long domainID;
         public HashMap<Long, Article> articles = new HashMap<Long, Article>();
+        public HashMap<Long, Article> recommendableArticles = new HashMap<Long, Article>();
 
         public Domain(long domainID){
             this.domainID = domainID;
@@ -47,10 +47,10 @@ public class Datastore {
         if(itemUpdate.itemID != 0) {
             if (!domain.articles.containsKey(itemUpdate.itemID)) {
                 domain.articles.put(itemUpdate.itemID, new Article(itemUpdate.itemID));
-                //addArticleToUsers(domain,  domain.articles.get(itemUpdate.itemID));     // Performance problem
             }
             Article article = domain.articles.get(itemUpdate.itemID);
             article.updateInfo(domain, itemUpdate.created_date, itemUpdate.title, itemUpdate.text, itemUpdate.recommendable);
+            if(article.recommendable){ domain.recommendableArticles.put(itemUpdate.itemID, article); }
         }
         else{
             System.out.println("itemUpdate.itemID = 0;  " + itemUpdate.itemID);
@@ -70,13 +70,15 @@ public class Datastore {
             User user = users.get(rec.userID);
             Article article = domains.get(rec.domainID).articles.get(rec.itemID);
             article.setKeyWords(keyWordsObject.getKeyWords(rec.domainID, rec.itemID, rec.timeStamp));
-
+            for (long keyword : article.keyWords.keySet()){
+                all_keywords.add(keyword);
+            }
 
             user.registerReqEventForUser(domains.get(rec.domainID), article, rec.timeStamp);
             article.user_visited.put(rec.userID, user);
 
             // Call recommendation algorithm
-            ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), article, user);
+            ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), article, user, rec.limit);
             user.registerRecommendation(domains.get(rec.domainID), recArticleIDs);
         }
         // This part adds articles not added by item_update
@@ -87,7 +89,11 @@ public class Datastore {
             if(!domain.articles.containsKey(rec.itemID)) {
                 domain.articles.put(rec.itemID, new Article(rec.itemID));
                 Article article = domain.articles.get(rec.itemID);
-                article.updateInfo(domain, rec.timeStamp, "", "", false); // Should it be recommendable?
+                article.updateInfo(domain, rec.timeStamp, "", "", false);
+                article.setKeyWords(keyWordsObject.getKeyWords(rec.domainID, rec.itemID, rec.timeStamp));
+                for (long keyword : article.keyWords.keySet()){
+                    all_keywords.add(keyword);
+                }
             }
             registerRecommendationReq(rec, recommender, false, keyWordsObject);
         }
@@ -96,9 +102,12 @@ public class Datastore {
 
 
     public void registerClickEvent(ClickEvent clickEvent){
-        if(domains.containsKey(clickEvent.domainID) && users.containsKey(clickEvent.userID)) {
+        if(domains.containsKey(clickEvent.domainID) && users.containsKey(clickEvent.userID)){
+
             User user = users.get(clickEvent.userID);
-            if (clickEvent.clickedArticles.size() > 0) {
+            if (clickEvent.clickedArticles.size() > 0
+                    && domains.get(clickEvent.domainID).recommendableArticles.containsKey(clickEvent.clickedArticles.get(0))){
+
                 user.registerClickEvent(domains.get(clickEvent.domainID), clickEvent.itemID, clickEvent.clickedArticles.get(0));
             }
         }

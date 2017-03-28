@@ -3,6 +3,8 @@ package clef.newsreel;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
+
 import clef.newsreel.Datastore.Domain;
 
 
@@ -14,7 +16,7 @@ public class User{
     public Long userID;
 
     public HashMap<Long, ArrayList<Session>> sessions = new HashMap<Long, ArrayList<Session>>();    //<DomainID, List<Session>>
-    public HashMap<Long, ArrayList<Visit>> articlesVisited = new HashMap<Long, ArrayList<Visit>>();  //<DomainID, List<Visit>>
+    public HashMap<Long, HashMap<Long, Visit>> articlesVisited = new HashMap<Long, HashMap<Long, Visit>>();  //<DomainID, HashMap<itemID, Visit>>
     public HashMap<Long, UserStatistics> statistics = new HashMap<Long, UserStatistics>();
 
 
@@ -42,8 +44,10 @@ public class User{
         sessionList.get(sessionList.size()-1).addVisit(visit);
 
         // Add visit to the articleVisited list
-        if(!articlesVisited.containsKey(domain.domainID)){ articlesVisited.put(domain.domainID, new ArrayList<Visit>()); }
-        articlesVisited.get(domain.domainID).add(visit);
+        if(!articlesVisited.containsKey(domain.domainID)){ articlesVisited.put(domain.domainID, new HashMap<Long, Visit>()); }
+        if(!articlesVisited.get(domain.domainID).containsKey(article.itemID)){
+            articlesVisited.get(domain.domainID).put(article.itemID, visit);
+        }
 
         // Add to statistic for the current user at the current domain
         if(!statistics.containsKey(domain.domainID)){ statistics.put(domain.domainID, new UserStatistics()); }
