@@ -48,22 +48,7 @@ public class Article{
     public void setKeyWords(HashMap<Long, Integer> kWords) {
 
         if(kWords == null || kWords.size() == 0){ return; }
-        if (keyWords.size() != 0 && kWords.size() > 0) {
-            boolean isDiffrent = false;
-            for (Long k : kWords.keySet()) {
-                if (!keyWords.containsKey(k) || (int) keyWords.get(k) != (int) kWords.get(k)) {
-                    isDiffrent = true;
-                }
-            }
-            for (Long k : keyWords.keySet()) {
-                if (!kWords.containsKey(k) || (int) keyWords.get(k) != (int) kWords.get(k)) {
-                    isDiffrent = true;
-                }
-            }
 
-            if(isDiffrent){ System.out.println("Keywords changed");}
-
-        }
         keyWords = new HashMap<Long, Integer>();
         for (Long k : kWords.keySet()) {
             long key = k;

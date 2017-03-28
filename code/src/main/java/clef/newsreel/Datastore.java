@@ -76,7 +76,7 @@ public class Datastore {
             article.user_visited.put(rec.userID, user);
 
             // Call recommendation algorithm
-            ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), user);
+            ArrayList<Long> recArticleIDs = recommender.recommendArticle(domains.get(rec.domainID), article, user);
             user.registerRecommendation(domains.get(rec.domainID), recArticleIDs);
         }
         // This part adds articles not added by item_update
@@ -87,7 +87,7 @@ public class Datastore {
             if(!domain.articles.containsKey(rec.itemID)) {
                 domain.articles.put(rec.itemID, new Article(rec.itemID));
                 Article article = domain.articles.get(rec.itemID);
-                article.updateInfo(domain, rec.timeStamp, "", "", true); // Should it be recommendable?
+                article.updateInfo(domain, rec.timeStamp, "", "", false); // Should it be recommendable?
             }
             registerRecommendationReq(rec, recommender, false, keyWordsObject);
         }

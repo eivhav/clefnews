@@ -18,7 +18,7 @@ public class Recommender {
 
     //TODO
 
-    public ArrayList<Long> recommendArticle(Domain domain, User user){
+    public ArrayList<Long> recommendArticle(Domain domain, Article article, User user){
         return new ArrayList<Long>();
     }
 

@@ -15,7 +15,6 @@ public class User{
 
     public HashMap<Long, ArrayList<Session>> sessions = new HashMap<Long, ArrayList<Session>>();    //<DomainID, List<Session>>
     public HashMap<Long, ArrayList<Visit>> articlesVisited = new HashMap<Long, ArrayList<Visit>>();  //<DomainID, List<Visit>>
-    public HashMap<Long, HashMap<Long, Article>> articlesNotVisited = new HashMap<Long, HashMap<Long, Article>>();
     public HashMap<Long, UserStatistics> statistics = new HashMap<Long, UserStatistics>();
 
 
@@ -25,27 +24,8 @@ public class User{
         this.userID = userID;
         //Should we perhaps have som more info about our users?
 
-        /* // Performance problem
-        // New user means that we need to copy all articles into nonVisitedArticles
-        for(Long domainID : domains.keySet()){
-            HashMap<Long, Article> articles = domains.get(domainID).articles;
-            if(!articlesNotVisited.containsKey(domainID)){ articlesNotVisited.put(domainID, new HashMap<Long, Article>()); }
-            for(Long itemID : articles.keySet()) {
-                articlesNotVisited.get(domainID).put(itemID, articles.get(itemID));
-            }
-        }
-         */
     }
 
-
-    public void addNewArticle(Domain domain, Article article) {
-        if (!articlesNotVisited.containsKey(domain.domainID)) {
-            articlesNotVisited.put(domain.domainID, new HashMap<Long, Article>());
-        }
-        if (!articlesNotVisited.get(domain.domainID).containsKey(article.itemID)) {
-            articlesNotVisited.get(domain.domainID).put(article.itemID, article);
-        }
-    }
 
 
     public void registerReqEventForUser(Domain domain, Article article, long time){
@@ -64,11 +44,6 @@ public class User{
         // Add visit to the articleVisited list
         if(!articlesVisited.containsKey(domain.domainID)){ articlesVisited.put(domain.domainID, new ArrayList<Visit>()); }
         articlesVisited.get(domain.domainID).add(visit);
-
-        // Remove from nonVisited list. No effect due to the performance issue
-        if(articlesNotVisited.containsKey(domain.domainID) && articlesNotVisited.get(domain.domainID).containsKey(article.itemID)){
-            articlesNotVisited.get(domain.domainID).remove(article.itemID);
-        }
 
         // Add to statistic for the current user at the current domain
         if(!statistics.containsKey(domain.domainID)){ statistics.put(domain.domainID, new UserStatistics()); }
