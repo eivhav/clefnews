@@ -1,6 +1,6 @@
 /*
 Copyright (c) 2013, TU Berlin
-Permission is hereby granted, free of charge, to any person obtaining 
+Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the "Software"),
 to deal in the Software without restriction, including without limitation
 the rights to use, copy, modify, merge, publish, distribute, sublicense,
@@ -12,8 +12,8 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
 OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL
 THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING 
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
+FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
 DEALINGS IN THE SOFTWARE.
 */
 
@@ -22,11 +22,11 @@ package de.dailab.plistacontest.client;
 import java.util.*;
 
 /**
- * A HashMap providing a ring buffer for each key. This implementation shall illustrate a simple baseline recommender. 
- * A fixed number of items is inserted into a list. The items are recommended in reversed chronological order. When 
- * the list reaches its pre-defined size, the least recent items are dropped. Thus, the recommender considers recency 
+ * A HashMap providing a ring buffer for each key. This implementation shall illustrate a simple baseline recommender.
+ * A fixed number of items is inserted into a list. The items are recommended in reversed chronological order. When
+ * the list reaches its pre-defined size, the least recent items are dropped. Thus, the recommender considers recency
  * as most important factor.
- * 
+ *
  * @author andreas
  *
  * @param <K> the type of the key
@@ -51,7 +51,7 @@ public class DirtyRingBuffer<K, V> {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param maximalNumberOfItemsPerKey
 	 **/
 	public DirtyRingBuffer(final int maximalNumberOfItemsPerKey) {
@@ -64,7 +64,7 @@ public class DirtyRingBuffer<K, V> {
 	 * If there is no ring buffer for the key, create a ring buffer
 	 * The add method is synchronized in order to ensure that all values are inserted correctly
 	 * key refers to the publisher id (context.simple.27)
-	 * 
+	 *
 	 * @param key
 	 *            the key
 	 * @param value
@@ -77,7 +77,7 @@ public class DirtyRingBuffer<K, V> {
 			throw new RuntimeException("invalid arguments k=" + key);
 		}
 
-		//synchronized (this) 
+		//synchronized (this)
 		{
 			V[] currentList = (V[]) this.listByKey.get(key);
 			if (currentList == null) {
@@ -92,13 +92,13 @@ public class DirtyRingBuffer<K, V> {
 			listIndex[0] = (++listIndex[0]) % maximalNumberOfItemsPerKey;
 		}
 	}
-	
+
 	/**
 	 * Get some values from the ring buffer.
 	 * This method is NOT synchronized and may return inconsistent values.
 	 * This method does not block. It always returns an HashSet (might be empty)
 	 * values refer to all items which are in the publisher's item list
-	 * 
+	 *
 	 * @param key
 	 * @param numberOfValues
 	 * @param _blackListedIDs
@@ -113,18 +113,16 @@ public class DirtyRingBuffer<K, V> {
 
 		// define the result
 		Set<V> result = new HashSet<V>();
-		
+
 		// determine the current write position
 		int[] temp = this.listIndexByKey.get(key);
 		System.out.println(">>>temp:");
-		if(temp!=null){
-			for(int i=0;i<temp.length;i++){
-				System.out.print(temp[i]);
-				System.out.print(",");
-			}
+		for(int i=0;i<temp.length;i++){
+			System.out.print(temp[i]);
+			System.out.print(",");
 		}
 		System.out.println("");
-		
+
 		// search backward in the ring buffer starting just at the last written position
 		if (temp != null){
 			int currentIndex =  temp[0];
@@ -145,7 +143,7 @@ public class DirtyRingBuffer<K, V> {
 						&& r <= threshHold) {
 					result.add(currentObject);
 				}
-				
+
 				if (result.size() >= numberOfValues) {
 					break;
 				}
@@ -157,7 +155,7 @@ public class DirtyRingBuffer<K, V> {
 
 	/**
 	 * Get a nice string representation for debugging
-	 * 
+	 *
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
@@ -172,7 +170,7 @@ public class DirtyRingBuffer<K, V> {
 
 	/**
 	 * A test case checking the functionality.
-	 * 
+	 *
 	 * @param args
 	 * @throws InterruptedException
 	 */
