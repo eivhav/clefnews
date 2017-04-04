@@ -15,9 +15,9 @@ public class Main {
 
     public static void main(String[] args){
 
-        String filePathLog = "/media/havikbot/F/CLEFdata/";
-        String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,7};  // {1,1} for 2016-02-01.log,
+        String filePathLog = "/home/havikbot/Documents/CLEFnews/";
+        String filePathSer = "/home/havikbot/Documents/CLEFnews/";
+        int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
         // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();

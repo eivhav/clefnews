@@ -174,8 +174,8 @@ public class DataLoader implements Serializable  {
             BufferedReader br = new BufferedReader(new FileReader(path+fileName));
             for(String line; (line = br.readLine()) != null;  ) {
                 counts[0]++;
-
                 if(line.substring(0,11).equals("item_update")){
+
                     ItemUpdate itemUpdate = parseItemUpdates(line.substring(12, line.length()-24));
                     if(itemUpdate != null){
                         events.add(itemUpdate);
