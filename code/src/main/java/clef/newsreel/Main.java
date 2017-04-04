@@ -5,10 +5,8 @@ import org.json.simple.JSONValue;
 
 import java.io.*;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Set;
+import java.util.*;
+
 import clef.newsreel.DataLoader.ItemUpdate;
 import clef.newsreel.DataLoader.ClickEvent;
 import clef.newsreel.DataLoader.RecommendationReq;
@@ -25,7 +23,7 @@ public class Main {
 
         String filePathLog = "/media/havikbot/F/CLEFdata/";
         String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,5};  // {1,1} for 2016-02-01.log,
+        int[] fileNumbers = {1,7};  // {1,1} for 2016-02-01.log,
                                     // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
@@ -61,6 +59,26 @@ public class Main {
         System.out.println("Complete");
 
         System.out.println("keywords size:" + datastore.all_keywords.size());
+        System.out.println("articles size:");
+        for(long dKey : datastore.domains.keySet()){
+            System.out.println("  domain:" + dKey+" : " + datastore.domains.get(dKey).articles.size());
+        }
+        HashMap<Integer, Integer> article_counts = new HashMap<Integer, Integer>();
+        for(long dKey : datastore.domains.keySet()){
+            for(long itemID : datastore.domains.get(dKey).articles.keySet()){
+                Article article = datastore.domains.get(dKey).articles.get(itemID);
+                Integer user_count = article.user_visited.size();
+                if(!article_counts.containsKey(user_count)){article_counts.put(user_count, 0);}
+                article_counts.put(user_count, article_counts.get(user_count) + 1);
+            }
+        }
+        List sortedKeys=new ArrayList(article_counts.keySet());
+        Collections.sort(sortedKeys);
+        for(Object k : sortedKeys){
+            System.out.println( k + "\t" + article_counts.get(k));
+        }
+
+
 
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
