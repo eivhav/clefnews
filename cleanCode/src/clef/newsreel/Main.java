@@ -60,10 +60,10 @@ public class Main {
             System.out.println("  domain:" + dKey+" : " + datastore.domains.get(dKey).articles.size());
         }
 
+        recommender.buildCollaborativeProfiles(5, 1, 10);
 
-
-        ArrayList<int[]> ratingSparseMatrix =  datastore.getArticlesRead(20, 2);
-        int nbArticles = datastore.getNoOfArticles();
+        //ArrayList<int[]> ratingSparseMatrix =  datastore.getArticlesRead(20, 2);
+        //int nbArticles = datastore.getNoOfArticles();
 
 
         /**

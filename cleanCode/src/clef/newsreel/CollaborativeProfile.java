@@ -11,11 +11,21 @@ import java.util.TreeSet;
 public class CollaborativeProfile implements Serializable {
 
     long userID;
-    TreeSet<UserSim> similarUsers = new TreeSet<UserSim>(new Comparator<UserSim>(){
+    TreeSet<UserSim> similarUsers;
+
+    public CollaborativeProfile(long userID){
+        this.userID = userID;
+        this.similarUsers = new TreeSet<UserSim>(new Comparator<UserSim>(){
             public int compare(final UserSim u1,  UserSim u2){
                 return u1.sim < u2.sim ? -1 : u1.sim == u2.sim ? 0 : 1;
             }
-    });
+        });
+    }
+
+    public void addUserSim(long userID, double sim){
+        similarUsers.add(new UserSim(userID, sim));
+    }
+
 
 
     class UserSim implements Serializable {

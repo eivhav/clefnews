@@ -17,6 +17,7 @@ public class User{
 
     public HashMap<Long, ArrayList<Session>> sessions = new HashMap<Long, ArrayList<Session>>();    //<DomainID, List<Session>>
     public HashMap<Long, HashMap<Long, Visit>> articlesVisited = new HashMap<Long, HashMap<Long, Visit>>();  //<DomainID, HashMap<itemID, Visit>>
+    public HashMap<Long, Visit> articlesVisitedAllDomians = new HashMap<Long, Visit>();
     public HashMap<Long, UserStatistics> statistics = new HashMap<Long, UserStatistics>();
 
 
@@ -85,21 +86,7 @@ public class User{
     }
 
 
-    public void printSessions(){
-        for(Long domainID : sessions.keySet()){
-            for (Session s : sessions.get(domainID)){
-                s.printSession();
-            }
-        }
-    }
 
-    public int getNoOfSessions(){
-        int count = 0;
-        for(long dKey : sessions.keySet()){
-            count += sessions.get(dKey).size();
-        }
-        return count;
-    }
 
 
 
@@ -153,6 +140,43 @@ public class User{
         int nb_sucssessfullRecs = 0;
 
         public UserStatistics(){}
+    }
+
+
+
+    public void printSessions(){
+        for(Long domainID : sessions.keySet()){
+            for (Session s : sessions.get(domainID)){
+                s.printSession();
+            }
+        }
+    }
+
+    public int getNoOfSessions(){
+        int count = 0;
+        for(long dKey : sessions.keySet()){
+            count += sessions.get(dKey).size();
+        }
+        return count;
+    }
+
+    public HashMap<Long, Visit> getAllArticles(){
+        HashMap<Long, Visit> allArticles = new HashMap<Long, Visit>();
+        for(long dKey : articlesVisited.keySet()){
+            for(long itemID : articlesVisited.get(dKey).keySet()) {
+                allArticles.put(itemID, articlesVisited.get(dKey).get(itemID));
+            }
+        }
+        return allArticles;
+    }
+
+    public int getNoOfReadArticles(){
+        int count = 0;
+        for(long dKey : articlesVisited.keySet()){
+            count += articlesVisited.get(dKey).size();
+        }
+        return count;
+
     }
 
 

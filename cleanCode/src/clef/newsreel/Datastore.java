@@ -147,6 +147,20 @@ public class Datastore {
     }
 
 
+    public ArrayList<User> getUsersAboveThreshold(int nbArticlesThreshold, int nbSessionsThreshold) {
+        ArrayList<User> users1 = new ArrayList<User>();
+        for (long userID : users.keySet()) {
+            if (users.get(userID).getNoOfReadArticles() >= nbArticlesThreshold &&
+                    users.get(userID).getNoOfSessions() >= nbSessionsThreshold) {
+                users1.add(users.get(userID));
+            }
+
+        }
+        return users1;
+    }
+
+
+
     public int getNoOfArticles() {
         int count = 0;
         for (long dKey : domains.keySet()) {
