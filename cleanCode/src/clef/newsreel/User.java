@@ -93,6 +93,15 @@ public class User{
         }
     }
 
+    public int getNoOfSessions(){
+        int count = 0;
+        for(long dKey : sessions.keySet()){
+            count += sessions.get(dKey).size();
+        }
+        return count;
+    }
+
+
 
     /**
      * A session is the recorded user behaviour(articles visited withinn a certain time frame).

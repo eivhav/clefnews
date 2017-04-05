@@ -15,8 +15,10 @@ public class Main {
 
     public static void main(String[] args){
 
-        String filePathLog = "/home/havikbot/Documents/CLEFnews/";
-        String filePathSer = "/home/havikbot/Documents/CLEFnews/";
+        //String filePathLog = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
+        //String filePathSer = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
+        String filePathLog = "/home/havikbot/Documents/CLEFdata/";
+        String filePathSer = "/home/havikbot/Documents/CLEFdata/";
         int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
         // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
@@ -57,23 +59,25 @@ public class Main {
         for(long dKey : datastore.domains.keySet()){
             System.out.println("  domain:" + dKey+" : " + datastore.domains.get(dKey).articles.size());
         }
-        HashMap<Integer, Integer> article_counts = new HashMap<Integer, Integer>();
-        for(long dKey : datastore.domains.keySet()){
-            for(long itemID : datastore.domains.get(dKey).articles.keySet()){
-                Article article = datastore.domains.get(dKey).articles.get(itemID);
-                Integer user_count = article.user_visited.size();
-                if(!article_counts.containsKey(user_count)){article_counts.put(user_count, 0);}
-                article_counts.put(user_count, article_counts.get(user_count) + 1);
-            }
-        }
-        List sortedKeys=new ArrayList(article_counts.keySet());
-        Collections.sort(sortedKeys);
-        for(Object k : sortedKeys){
-            System.out.println( k + "\t" + article_counts.get(k));
-        }
 
 
 
+        ArrayList<int[]> ratingSparseMatrix =  datastore.getArticlesRead(20, 2);
+        int nbArticles = datastore.getNoOfArticles();
+
+
+        /**
+         for (int[] userLine : ratingSparseMatrix){
+         System.out.println(Arrays.toString(userLine));
+         }
+
+
+        Spark spark = new Spark();
+        spark.getPcaSvdRowList(ratingSparseMatrix, nbArticles);
+        spark.runSVD(1000, ratingSparseMatrix, nbArticles);
+        spark.runPCA(1000, ratingSparseMatrix, nbArticles
+
+         **/
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
         evaluation(datastore);
@@ -120,6 +124,23 @@ public class Main {
         return String.format("%1$"+length+ "s", string);
     }
 
+
+    public void printUserPerArticleCount(Datastore datastore){
+        HashMap<Integer, Integer> article_counts = new HashMap<Integer, Integer>();
+        for(long dKey : datastore.domains.keySet()){
+            for(long itemID : datastore.domains.get(dKey).articles.keySet()){
+                Article article = datastore.domains.get(dKey).articles.get(itemID);
+                Integer user_count = article.user_visited.size();
+                if(!article_counts.containsKey(user_count)){article_counts.put(user_count, 0);}
+                article_counts.put(user_count, article_counts.get(user_count) + 1);
+            }
+        }
+        List sortedKeys=new ArrayList(article_counts.keySet());
+        Collections.sort(sortedKeys);
+        for(Object k : sortedKeys){
+            System.out.println( k + "\t" + article_counts.get(k));
+        }
+    }
 
 
 

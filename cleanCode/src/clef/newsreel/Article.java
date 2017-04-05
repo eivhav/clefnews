@@ -22,6 +22,8 @@ public class Article{
 
     public boolean recommendable = false;
 
+    public int articleIndex = 0;
+
     public Article(Long itemID){
         this.itemID = itemID;
     }

@@ -1,6 +1,6 @@
 
 package clef.newsreel;
-
+/*
 import net.librec.conf.Configuration;
 
 import net.librec.data.model.TextDataModel;
@@ -27,7 +27,7 @@ import java.util.List;
 public class LibRecRecommender {
 
     public static void main(String[] args) throws Exception {
-
+        /*
         // build data model
         Configuration conf = new Configuration();
         conf.set("dfs.data.dir", "/home/gram/IdeaProjects/librec/data");
@@ -76,6 +76,7 @@ public class LibRecRecommender {
                             "value:" + recommendedItem.getValue()
             );
         }
+        */
 
     }
 
