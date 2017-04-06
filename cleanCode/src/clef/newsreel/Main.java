@@ -15,11 +15,11 @@ public class Main {
 
     public static void main(String[] args){
 
-        //String filePathLog = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
-        //String filePathSer = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
-        String filePathLog = "/home/havikbot/Documents/CLEFdata/";
-        String filePathSer = "/home/havikbot/Documents/CLEFdata/";
-        int[] fileNumbers = {1,1};  // {1,1} for 2016-02-01.log,
+        String filePathLog = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
+        String filePathSer = "/export/b/home/lemeiz/clefnew/idomaar/datastreammanager/input/newsreel-test/2017-NewsREEL/";
+        //String filePathLog = "/home/havikbot/Documents/CLEFdata/";
+        //String filePathSer = "/home/havikbot/Documents/CLEFdata/";
+        int[] fileNumbers = {1,28};  // {1,1} for 2016-02-01.log,
         // {1,3} for (2016-02-01.log + 2016-02-02.log + 2016-02-03.log) etc.
 
         DataLoader dataloader = new DataLoader();
@@ -32,16 +32,30 @@ public class Main {
         double count = 0;
         double size = dataStream.size();
         double lastProg = 0;
+        int day = 0;
+
+        int[] statistics= new int[4];            // Articles, users, recomendationrecs, key_words
 
         KeyWordsObject keyWordsObject = null;
 
         for(Object event : dataStream) {
-            if (event instanceof KeyWordsObject) {
+            if(event == null){
+                statistics[0] += datastore.getNoOfArticles();
+                statistics[1] += datastore.users.size();
+                statistics[3] += datastore.all_keywords.size();
+                day++;
+                System.out.println(" \n for day" + day + "\t"+ statistics[0] + "\t" + statistics[1] + "\t" + statistics[2] + "\t" + statistics[3]);
+                //evaluation(datastore);
+                statistics = new int[4];
+            }
+            else if (event instanceof KeyWordsObject) {
+                statistics= new int[4];
                 keyWordsObject = (KeyWordsObject) event;
             } else if (event instanceof ItemUpdate) {
                 datastore.registerArticle((ItemUpdate) event);
             } else if (event instanceof RecommendationReq) {
                 datastore.registerRecommendationReq((RecommendationReq) event, recommender, false, keyWordsObject);
+                statistics[2] += 1;
             } else if (event instanceof ClickEvent) {
                 datastore.registerClickEvent((ClickEvent) event);
             }
@@ -52,7 +66,14 @@ public class Main {
             }
             count++;
         }
-        System.out.println("Complete");
+        System.out.println("Complete for " + Arrays.toString(fileNumbers));
+
+        statistics[0] += datastore.getNoOfArticles();
+        statistics[1] += datastore.users.size();
+        statistics[2] += datastore.all_keywords.size();
+        System.out.println(statistics[0] + "\t" + statistics[1] + "\t" + statistics[2] + "\t" + statistics[3]);
+
+
 
         System.out.println("keywords size:" + datastore.all_keywords.size());
         System.out.println("articles size:");
@@ -60,13 +81,15 @@ public class Main {
             System.out.println("  domain:" + dKey+" : " + datastore.domains.get(dKey).articles.size());
         }
 
+        //recommender.cf.loadCFprofiles(filePathSer, fileNumbers, 20, 1, 4);
 
+        /*
         try {
-            recommender.cf.comparePrintTopKusers(recommender.cf.buildCollaborativeProfiles(15, 2, 10), 10);
+            recommender.cf.comparePrintTopKusers(recommender.cf.buildCollaborativeProfiles(10, 1, 10), 10);
         } catch (InterruptedException e){
             System.err.println("Could not create userProfiles");
         }
-
+        */
 
         //ArrayList<int[]> ratingSparseMatrix =  datastore.getArticlesRead(20, 2);
         //int nbArticles = datastore.getNoOfArticles();
@@ -86,7 +109,7 @@ public class Main {
          **/
         // The timing is inconsistent for recommendationReq objects, CHECK this
         //datastore.printUserSessions();
-        evaluation(datastore);
+        //evaluation(datastore);
 
 
 
@@ -147,6 +170,9 @@ public class Main {
             System.out.println( k + "\t" + article_counts.get(k));
         }
     }
+
+
+
 
 
 

@@ -1,18 +1,59 @@
 package clef.newsreel;
 
-import java.io.Serializable;
+import java.io.*;
 import java.util.*;
 
 /**
  * Created by havikbot on 06.04.17.
  */
-public class CollaborativeFiltering {
+public class CollaborativeFiltering implements Serializable{
 
     Datastore datastore;
+    HashMap<Long, CollaborativeProfile> offlineProfiles = new HashMap<Long, CollaborativeProfile>();
 
     public CollaborativeFiltering(Datastore datastore){
         this.datastore = datastore;
     }
+
+
+    public void loadCFprofiles(String path, int[] days, int nbArticlesThreshold, int nbSessionsThreshold, int nbThreads) {
+        String filePath = path + "collaborativeProfilesFor" + days[0] + "-" + days[1];
+        try {
+            FileInputStream fileIn = new FileInputStream(filePath + ".ser");
+            ObjectInputStream in = new ObjectInputStream(fileIn);
+            System.out.println("Reading serialized file: " + filePath + ".ser");
+            HashMapContainer container = (HashMapContainer) in.readObject();
+            offlineProfiles = container.profiles;
+            in.close();
+            fileIn.close();
+        } catch (IOException ioE) {
+            System.out.println("Could not find .ser file. ");
+            try {
+                offlineProfiles = buildCollaborativeProfiles(nbArticlesThreshold, nbSessionsThreshold, nbThreads);
+                try {
+                    FileOutputStream fileOut2 = new FileOutputStream(filePath+".ser");
+                    ObjectOutputStream out = new ObjectOutputStream(fileOut2);
+                    HashMapContainer container = new HashMapContainer(offlineProfiles);
+                    out.writeObject(container);
+                    out.close();
+                    fileOut2.close();
+                    System.out.println("Serialized data is saved in "+filePath+".ser");
+                }
+                catch(IOException ioE23) {
+                    ioE23.printStackTrace();
+                    System.err.println("Could not save .ser file");
+                }
+
+            } catch (InterruptedException e) {
+                System.err.println("Could not build CF profiles, Interrupted");
+            }
+
+        } catch (ClassNotFoundException c) {
+            c.printStackTrace();
+            System.err.println("(HashMap<Long, CollaborativeProfile>) class not found when loading .ser file");
+        }
+    }
+
 
 
 
@@ -42,16 +83,17 @@ public class CollaborativeFiltering {
             threads.get(i).start();
         }
 
-        double lastPrecent = 0;
+        double timespent = 0;
+        long sleepTime = 5000;
         while(users.size() > getComplteCount(threads)){
-            Thread.sleep(150);
+            Thread.sleep(sleepTime);
+            timespent += sleepTime;
 
-            double percentage = (100.0*(double)getComplteCount(threads) / (double)users.size());
-            double timeLeft =  (1- percentage)/ ((percentage - lastPrecent) / 15.0);
-            lastPrecent = percentage;
+            double percentage = (double)getComplteCount(threads) / (double)users.size();
+            double timeLeft = timespent/percentage  * (1.0-percentage);
             System.out.println("Processing... "
-                    + (int)percentage + "%, " + getComplteCount(threads) +"/"+ users.size()
-                    + "  ETA: " + (int)(timeLeft / 60) + " min");
+                    + String.format("%.1f", 100*percentage)+ "%, " + getComplteCount(threads) +"/"+ users.size()
+                    + "  ETA: " + String.format( "%.2f", (timeLeft / 60000)) + " min");
 
         }
 
@@ -77,7 +119,7 @@ public class CollaborativeFiltering {
 
 
 
-    class CFsimThread extends Thread{
+    class CFsimThread extends Thread implements Serializable{
 
         HashMap<Long, CollaborativeProfile> profiles;
         ArrayList<User> allUsers;
@@ -158,11 +200,14 @@ public class CollaborativeFiltering {
 
         public CollaborativeProfile(long userID) {
             this.userID = userID;
-            this.similarUsers = new TreeSet<UserSim>(new Comparator<UserSim>() {
-                public int compare(final UserSim u1, UserSim u2) {
-                    return u1.sim < u2.sim ? -1 : u1.sim == u2.sim ? 0 : 1;
-                }
-            });
+            this.similarUsers = new TreeSet<UserSim>(new myComparator());
+        }
+
+        class myComparator implements  Comparator<UserSim>, Serializable{
+
+            public int compare(final UserSim u1, UserSim u2) {
+                return u1.sim < u2.sim ? -1 : u1.sim == u2.sim ? 0 : 1;
+            }
         }
 
         public void addUserSim(long userID, double sim) {
@@ -179,6 +224,16 @@ public class CollaborativeFiltering {
                 this.userID = userID;
                 this.sim = sim;
             }
+        }
+
+    }
+
+    class HashMapContainer implements Serializable{
+
+        HashMap<Long, CollaborativeProfile> profiles;
+
+        public HashMapContainer(HashMap<Long, CollaborativeProfile> profiles){
+            this.profiles = profiles;
         }
 
     }

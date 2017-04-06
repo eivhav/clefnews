@@ -133,6 +133,7 @@ public class DataLoader implements Serializable  {
                 System.out.println("Reading serialized file: "+fileName+".ser");
                 singleFileStream = (ArrayList<Object>) in.readObject();
                 datastream.addAll(singleFileStream);
+                datastream.add(null);
                 in.close();
                 fileIn.close();
             }
