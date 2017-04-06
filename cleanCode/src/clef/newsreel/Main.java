@@ -60,7 +60,13 @@ public class Main {
             System.out.println("  domain:" + dKey+" : " + datastore.domains.get(dKey).articles.size());
         }
 
-        recommender.buildCollaborativeProfiles(5, 1, 10);
+
+        try {
+            recommender.cf.comparePrintTopKusers(recommender.cf.buildCollaborativeProfiles(15, 2, 10), 10);
+        } catch (InterruptedException e){
+            System.err.println("Could not create userProfiles");
+        }
+
 
         //ArrayList<int[]> ratingSparseMatrix =  datastore.getArticlesRead(20, 2);
         //int nbArticles = datastore.getNoOfArticles();
